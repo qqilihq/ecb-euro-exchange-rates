@@ -1,7 +1,7 @@
 # Euro Exchange Rates by ECB
 
-[![Run Status](https://api.shippable.com/projects/5b24232abf766d0700896479/badge?branch=master)](https://app.shippable.com/github/qqilihq/ecb-exchange-rates)
-[![Coverage Badge](https://api.shippable.com/projects/5b24232abf766d0700896479/coverageBadge?branch=master)](https://app.shippable.com/github/qqilihq/ecb-exchange-rates)
+[![Run Status](https://api.shippable.com/projects/5b24232abf766d0700896479/badge?branch=master)](https://app.shippable.com/github/qqilihq/ecb-euro-exchange-rates)
+[![Coverage Badge](https://api.shippable.com/projects/5b24232abf766d0700896479/coverageBadge?branch=master)](https://app.shippable.com/github/qqilihq/ecb-euro-exchange-rates)
 [![npm version](https://badge.fury.io/js/ecb-euro-exchange-rates.svg)](https://badge.fury.io/js/ecb-euro-exchange-rates)
 
 Retrieve Euro foreign exchange reference rates from an [API](http://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html) provided by the European Central Bank.
@@ -81,7 +81,7 @@ $ npm publish
 
 ## Contributing
 
-Pull requests are very welcome. Feel free to discuss bugs or new features by opening a new [issue](https://github.com/qqilihq/ecb-exchange-rates/issues).
+Pull requests are very welcome. Feel free to discuss bugs or new features by opening a new [issue](https://github.com/qqilihq/ecb-euro-exchange-rates/issues).
 
 
 - - -

@@ -7,11 +7,11 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/qqilihq/ecb-exchange-rates/issues"
+    "url": "https://github.com/qqilihq/ecb-euro-exchange-rates/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/qqilihq/ecb-exchange-rates.git"
+    "url": "git://github.com/qqilihq/ecb-euro-exchange-rates.git"
   },
   "keywords": [
     "euro",
