@@ -2,6 +2,7 @@
 
 [![Run Status](https://api.shippable.com/projects/5b24232abf766d0700896479/badge?branch=master)](https://app.shippable.com/github/qqilihq/ecb-exchange-rates)
 [![Coverage Badge](https://api.shippable.com/projects/5b24232abf766d0700896479/coverageBadge?branch=master)](https://app.shippable.com/github/qqilihq/ecb-exchange-rates)
+[![npm version](https://badge.fury.io/js/ecb-euro-exchange-rates.svg)](https://badge.fury.io/js/ecb-euro-exchange-rates)
 
 Retrieve Euro foreign exchange reference rates from an [API](http://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html) provided by the European Central Bank.
 
