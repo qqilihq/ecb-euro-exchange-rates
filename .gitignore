@@ -1,0 +1,9 @@
+# Dependency directories
+node_modules/
+
+yarn-error.log
+
+dist/
+
+.nyc_output
+coverage

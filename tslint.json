@@ -1,0 +1,16 @@
+{
+  "defaultSeverity": "error",
+  "extends": "tslint-config-standard",
+  "jsRules": {},
+  "rules": {
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "await-promise": [
+      true, 
+      "Bluebird"
+    ]
+  },
+  "rulesDirectory": []
+}
