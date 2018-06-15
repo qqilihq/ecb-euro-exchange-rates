@@ -1,8 +1,25 @@
 {
-  "name": "ecb-exchange-rates",
+  "name": "ecb-euro-exchange-rates",
+  "description": "Retrieve Euro foreign exchange reference rates from the European Central Bank",
+  "author": "Philipp Katz <philipp@philippkatz.de>",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qqilihq/ecb-exchange-rates/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/qqilihq/ecb-exchange-rates.git"
+  },
+  "keywords": [
+    "euro",
+    "currency",
+    "rates",
+    "ecb",
+    "typescript"
+  ],
   "scripts": {
     "test": "mocha",
     "lint": "tslint -p tsconfig.json 'lib/**/*.ts' 'test/**/*.ts'",

@@ -40,6 +40,49 @@ The API provides exchange rates updated daily for the following currencies:
 * **THB**: Thai baht
 * **ZAR**: South African rand
 
+## Installation
+
+```
+$ yarn add ecb-euro-exchange-rates
+```
+
+## Usage
+
+TS typings are available and you’ll get auto-completion for the supported currencies.
+
+```
+import * as exchangeRates from 'ecb-euro-exchange-rates';
+
+const result = await exchangeRates.fetch();
+console.log('Last update: ' + result.time);
+console.log('USD: ' + result.rates.USD);
+```
+
+## Development
+
+Install NPM dependencies with `yarn`.
+
+To execute the tests, run `yarn test`.
+
+For the best development experience, make sure that your editor supports [TSLint](https://palantir.github.io/tslint/usage/third-party-tools/) and [EditorConfig](http://editorconfig.org).
+
+## Releasing to NPM
+
+Commit all changes and run the following:
+
+```
+$ npm login
+$ npm version <update_type>
+$ npm publish
+```
+
+… where `<update_type>` is one of `patch`, `minor`, or `major`. This will update the `package.json`, and create a tagged Git commit with the version number.
+
+## Contributing
+
+Pull requests are very welcome. Feel free to discuss bugs or new features by opening a new [issue](https://github.com/qqilihq/ecb-exchange-rates/issues).
+
+
 - - -
 
 Copyright Philipp Katz, [LineUpr GmbH](http://lineupr.com), 2018
