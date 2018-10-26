@@ -44,23 +44,45 @@ export interface IExchangeRateResult {
 // http://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html
 
 export async function fetch (): Promise<IExchangeRateResult> {
-
   const result = await request('http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml').promise();
+  const rates = await parse(result);
+  if (rates.length !== 1) {
+    throw new Error(`Expected result to contain one single entry, but got ${rates.length}`);
+  }
+  return rates[0];
+}
 
-  return new Promise<IExchangeRateResult>((resolve, reject) => {
+export async function fetchHistoric (): Promise<IExchangeRateResult[]> {
+  return parse(await request('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml').promise());
+}
+
+export async function fetchHistoric90d (): Promise<IExchangeRateResult[]> {
+  return parse(await request('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml').promise());
+}
+
+function parse (result: any): Promise<IExchangeRateResult[]> {
+  return new Promise<IExchangeRateResult[]>((resolve, reject) => {
 
     xml2js.parseString(result, (err, data) => {
       if (err) return reject(err);
 
-      const time = data['gesmes:Envelope']['Cube'][0]['Cube'][0]['$']['time'];
+      const result: IExchangeRateResult[] = [];
+      const entries = data['gesmes:Envelope']['Cube'][0]['Cube'];
 
-      const rates = {} as any;
-      for (const item of data['gesmes:Envelope']['Cube'][0]['Cube'][0]['Cube']) {
-        const currency = item['$']['currency'];
-        const rate = parseFloat(item['$']['rate']);
-        rates[currency] = rate;
+      for (const current of entries) {
+
+        const time = current['$']['time'];
+        const rates = {} as any;
+        for (const item of current['Cube']) {
+          const currency = item['$']['currency'];
+          const rate = parseFloat(item['$']['rate']);
+          rates[currency] = rate;
+        }
+
+        result.push({ time, rates });
+
       }
-      resolve({ time, rates });
+      resolve(result);
     });
   });
 

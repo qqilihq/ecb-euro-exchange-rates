@@ -59,6 +59,8 @@ console.log('Last update: ' + result.time);
 console.log('USD: ' + result.rates.USD);
 ```
 
+Historic rates are available via `fetchHistoric90d` (fetches previous 90 days) and `fetchHistoric` (fetches **all** rates back to 1999).
+
 ## Development
 
 Install NPM dependencies with `yarn`.
