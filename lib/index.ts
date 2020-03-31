@@ -1,5 +1,5 @@
-import * as request from 'request-promise';
-import * as xml2js from 'xml2js';
+import request from 'request-promise';
+import xml2js from 'xml2js';
 
 export interface IExchangeRates {
   USD: number;
