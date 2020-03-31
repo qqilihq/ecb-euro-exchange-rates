@@ -28,15 +28,13 @@
     "preversion": "run-s clean lint test build"
   },
   "dependencies": {
-    "request": "^2.87.0",
-    "request-promise": "^4.2.2",
+    "axios": "^0.19.2",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@types/jest": "^25.1.4",
     "@types/node": "^10.17.18",
-    "@types/request-promise": "^4.1.41",
     "@types/xml2js": "^0.4.3",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
