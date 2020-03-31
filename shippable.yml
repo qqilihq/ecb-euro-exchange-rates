@@ -38,6 +38,6 @@ build:
     - yarn test
     # https://stackoverflow.com/a/52357797/388827
     - $MOD_LOC/jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --coverageReporters=html
-    - cp ./junit.xml $TEST_RESULTS_DIR && cp -r ./coverage/* $CODE_COVERAGE_DIR
+    - cp ./junit.xml $TEST_RESULTS_DIR && cp ./coverage/cobertura-coverage.xml $CODE_COVERAGE_DIR
 
     - yarn build
