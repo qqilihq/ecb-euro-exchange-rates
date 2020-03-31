@@ -1,4 +1,3 @@
-.nyc_output/
 coverage/
 lib/
 node_modules/
@@ -6,7 +5,7 @@ test/
 
 .editorconfig
 .gitignore
-.nycrc
+jest.config.js
 shippable.yml
 tsconfig.*
 tslint.json

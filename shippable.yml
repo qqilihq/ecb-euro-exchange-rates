@@ -9,9 +9,9 @@ node_js:
 
 # use this to control what branches get built.
 # http://docs.shippable.com/ci/advancedOptions/branches/
-branches:
-  only:
-    - master
+# branches:
+#   only:
+#     - master
 
 # using pre-defined build variables
 # full list http://docs.shippable.com/ci/advancedOptions/environmentVariables/
@@ -35,6 +35,9 @@ build:
 
     # run tests and keep test and coverage results
     - mkdir -p $TEST_RESULTS_DIR && mkdir -p $CODE_COVERAGE_DIR
-    - $MOD_LOC/nyc --reporter=cobertura --report-dir=$CODE_COVERAGE_DIR mocha -R mocha-junit-reporter --reporter-options mochaFile=$TEST_RESULTS_DIR/testresults.xml
+    - yarn test
+    # https://stackoverflow.com/a/52357797/388827
+    - $MOD_LOC/jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --coverageReporters=html
+    - cp ./junit.xml $TEST_RESULTS_DIR && cp -r ./coverage/* $CODE_COVERAGE_DIR
 
     - yarn build
