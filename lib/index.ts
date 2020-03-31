@@ -94,7 +94,5 @@ if (require.main === module) {
   (async () => {
     const result = await fetch();
     console.log(JSON.stringify(result, null, 2));
-  })().catch(() => {
-    /* :O */
-  });
+  })().catch(() => process.exit(1));
 }
