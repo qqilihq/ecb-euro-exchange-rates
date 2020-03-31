@@ -6,6 +6,7 @@ test/
 .editorconfig
 .eslintrc.js
 .gitignore
+.huskyrc.js
 .prettierrc.js
 jest.config.js
 shippable.yml
