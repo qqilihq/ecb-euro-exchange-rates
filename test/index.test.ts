@@ -1,42 +1,38 @@
-import expect = require('expect.js');
 import * as exchangeRates from '../lib/index';
+import 'jest-extended';
 
-describe('ECB exchange rates', function () {
-
+describe('ECB exchange rates', () => {
   // retrieving the history takes a bit of time
-  this.timeout(60 * 1000 /* 60 seconds */);
+  jest.setTimeout(60 * 1000 /* 60 seconds */);
 
   describe('retrieve exchange rates', function () {
-
     it('retrieves exchange rates', async () => {
       const result = await exchangeRates.fetch();
-      expect(result).to.be.an('object');
-      expect(result.time).to.be.a('string');
-      expect(result.rates).to.be.an('object');
-      expect(result.rates.USD).to.be.a('number');
+      expect(result).toBeObject();
+      expect(result.time).toBeString();
+      expect(result.rates).toBeObject();
+      expect(result.rates.USD).toBeNumber();
     });
 
     it('retrieves historic exchange rates', async () => {
       const result = await exchangeRates.fetchHistoric90d();
-      expect(result).to.be.an('array');
-      expect(result.length).to.be.greaterThan(50);
-      expect(result[0]).to.be.an('object');
-      expect(result[0].time).to.be.a('string');
-      expect(result[0].rates).to.be.an('object');
-      expect(result[0].rates.USD).to.be.a('number');
+      expect(result).toBeArray();
+      expect(result.length).toBeGreaterThan(50);
+      expect(result[0]).toBeObject();
+      expect(result[0].time).toBeString();
+      expect(result[0].rates).toBeObject();
+      expect(result[0].rates.USD).toBeNumber();
     });
 
     it('retrieves all historic exchange rates', async () => {
       const result = await exchangeRates.fetchHistoric();
-      expect(result).to.be.an('array');
-      expect(result.length).to.be.greaterThan(5000);
-      expect(result[0]).to.be.an('object');
-      expect(result[0].time).to.be.a('string');
-      expect(result[0].rates).to.be.an('object');
-      expect(result[0].rates.USD).to.be.a('number');
-      expect(result[result.length - 1].time).to.eql('1999-01-04');
+      expect(result).toBeArray();
+      expect(result.length).toBeGreaterThan(5000);
+      expect(result[0]).toBeObject();
+      expect(result[0].time).toBeString();
+      expect(result[0].rates).toBeObject();
+      expect(result[0].rates.USD).toBeNumber();
+      expect(result[result.length - 1].time).toEqual('1999-01-04');
     });
-
   });
-
 });
