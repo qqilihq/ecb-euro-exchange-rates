@@ -8,6 +8,7 @@ test/
 .gitignore
 .huskyrc.js
 .prettierrc.js
+commitlint.config.js
 jest.config.js
 shippable.yml
 tsconfig.*
