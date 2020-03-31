@@ -67,7 +67,9 @@ Install NPM dependencies with `yarn`.
 
 To execute the tests, run `yarn test`.
 
-For the best development experience, make sure that your editor supports [TSLint](https://palantir.github.io/tslint/usage/third-party-tools/) and [EditorConfig](http://editorconfig.org).
+For the best development experience, make sure that your editor supports [ESLint](https://eslint.org/docs/user-guide/integrations) and [EditorConfig](http://editorconfig.org).
+
+Linting of code and commit message happens on commit via [Husky](https://github.com/typicode/husky).
 
 ## Releasing to NPM
 
@@ -88,4 +90,4 @@ Pull requests are very welcome. Feel free to discuss bugs or new features by ope
 
 - - -
 
-Copyright Philipp Katz, [LineUpr GmbH](http://lineupr.com), 2018
+Copyright Philipp Katz, [LineUpr GmbH](http://lineupr.com), 2018 – 2020
