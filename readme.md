@@ -77,7 +77,7 @@ Commit all changes and run the following:
 
 ```
 $ npm login
-$ npm version <update_type>
+$ yarn version --<update_type>
 $ npm publish
 ```
 
