@@ -43,7 +43,7 @@ The API provides exchange rates updated daily for the following currencies:
 
 ## Installation
 
-```
+```shell
 $ yarn add ecb-euro-exchange-rates
 ```
 
@@ -51,7 +51,7 @@ $ yarn add ecb-euro-exchange-rates
 
 TS typings are available and you’ll get auto-completion for the supported currencies.
 
-```
+```javascript
 import * as exchangeRates from 'ecb-euro-exchange-rates';
 
 const result = await exchangeRates.fetch();
@@ -75,7 +75,7 @@ Linting of code and commit message happens on commit via [Husky](https://github.
 
 Commit all changes and run the following:
 
-```
+```shell
 $ npm login
 $ yarn version --<update_type>
 $ npm publish
