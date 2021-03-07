@@ -1,7 +1,7 @@
 # Euro Exchange Rates by ECB
 
-[![Run Status](https://api.shippable.com/projects/5b24232abf766d0700896479/badge?branch=master)](https://app.shippable.com/github/qqilihq/ecb-euro-exchange-rates)
-[![Coverage Badge](https://api.shippable.com/projects/5b24232abf766d0700896479/coverageBadge?branch=master)](https://app.shippable.com/github/qqilihq/ecb-euro-exchange-rates)
+[![Actions Status](https://github.com/qqilihq/ecb-euro-exchange-rates/workflows/CI/badge.svg)](https://github.com/qqilihq/ecb-euro-exchange-rates/actions)
+[![codecov](https://codecov.io/gh/qqilihq/ecb-euro-exchange-rates/branch/master/graph/badge.svg)](https://codecov.io/gh/qqilihq/ecb-euro-exchange-rates)
 [![npm version](https://badge.fury.io/js/ecb-euro-exchange-rates.svg)](https://badge.fury.io/js/ecb-euro-exchange-rates)
 
 Retrieve Euro foreign exchange reference rates from an [API](http://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html) provided by the European Central Bank. This module is intended to run on the server via Node.js, not in the browser.
@@ -90,4 +90,4 @@ Pull requests are very welcome. Feel free to discuss bugs or new features by ope
 
 - - -
 
-Copyright Philipp Katz, [LineUpr GmbH](http://lineupr.com), 2018 – 2020
+Copyright Philipp Katz, [LineUpr GmbH](http://lineupr.com), 2018 – 2021
