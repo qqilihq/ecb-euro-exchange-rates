@@ -1,3 +1,4 @@
+.github/
 coverage/
 lib/
 node_modules/
@@ -11,7 +12,6 @@ test/
 .yarnrc
 commitlint.config.js
 jest.config.js
-shippable.yml
 tsconfig.*
 yarn-error.log
 yarn.lock
