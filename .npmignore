@@ -8,6 +8,7 @@ test/
 .eslintrc.js
 .gitignore
 .huskyrc.js
+.ncurc.js
 .prettierrc.js
 .yarnrc
 commitlint.config.js
