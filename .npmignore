@@ -5,6 +5,7 @@ node_modules/
 test/
 
 .editorconfig
+.eslintignore
 .eslintrc.js
 .gitignore
 .huskyrc.js
