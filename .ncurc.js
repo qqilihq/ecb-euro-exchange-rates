@@ -1,4 +1,4 @@
 module.exports = {
   upgrade: true,
-  reject: ['@types/node', 'husky']
+  reject: ['@types/node']
 };

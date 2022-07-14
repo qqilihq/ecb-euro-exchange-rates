@@ -25,7 +25,8 @@
     "lint": "eslint --ext .ts ./lib ./test",
     "build": "tsc -p tsconfig.build.json",
     "clean": "rimraf ./coverage ./dist",
-    "preversion": "run-s clean lint test build"
+    "preversion": "run-s clean lint test build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -42,7 +43,7 @@
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^4.2.3",
+    "husky": "^7.0.0",
     "jest": "^28.1.3",
     "jest-extended": "^3.0.1",
     "jest-junit": "^14.0.0",
