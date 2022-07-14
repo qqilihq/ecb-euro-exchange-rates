@@ -65,35 +65,31 @@ async function get(url: string): Promise<string> {
   return result.data;
 }
 
-function parse(string: string): Promise<IExchangeRateResult[]> {
-  return new Promise<IExchangeRateResult[]>((resolve, reject) => {
-    xml2js.parseString(string, (err, data) => {
-      if (err) return reject(err);
+async function parse(string: string): Promise<IExchangeRateResult[]> {
+  const data = await xml2js.parseStringPromise(string);
+  const result: IExchangeRateResult[] = [];
+  const entries = data['gesmes:Envelope']['Cube'][0]['Cube'];
+  if (typeof entries !== 'object') {
+    throw new Error('Result data does not have the expected structure');
+  }
 
-      const result: IExchangeRateResult[] = [];
-      const entries = data['gesmes:Envelope']['Cube'][0]['Cube'];
-      if (typeof entries !== 'object') {
-        throw new Error('Result data does not have the expected structure');
-      }
+  for (const current of entries) {
+    const time = current?.['$']?.['time'];
+    assertString(time, 'time');
+    const rates = {} as any;
+    for (const item of current['Cube']) {
+      const currency = item['$']['currency'];
+      assertString(currency, 'curency');
+      const rateString = item['$']['rate'];
+      assertString(rateString, 'rate');
+      const rate = parseFloat(rateString);
+      rates[currency] = rate;
+    }
 
-      for (const current of entries) {
-        const time = current?.['$']?.['time'];
-        assertString(time, 'time');
-        const rates = {} as any;
-        for (const item of current['Cube']) {
-          const currency = item['$']['currency'];
-          assertString(currency, 'curency');
-          const rateString = item['$']['rate'];
-          assertString(rateString, 'rate');
-          const rate = parseFloat(rateString);
-          rates[currency] = rate;
-        }
+    result.push({ time, rates });
+  }
 
-        result.push({ time, rates });
-      }
-      resolve(result);
-    });
-  });
+  return result;
 }
 
 function assertString(value: unknown, valueName: string): asserts value is string {
