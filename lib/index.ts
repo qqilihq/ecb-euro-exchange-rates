@@ -1,5 +1,5 @@
 import axios from 'axios';
-import xml2js from 'xml2js';
+import { XMLParser } from 'fast-xml-parser';
 
 export interface IExchangeRates {
   USD: number;
@@ -45,7 +45,7 @@ export interface IExchangeRateResult {
 
 export async function fetch(): Promise<IExchangeRateResult> {
   const result = await get('http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml');
-  const rates = await parse(result);
+  const rates = parse(result);
   if (rates.length !== 1) {
     throw new Error(`Expected result to contain one single entry, but got ${rates.length}`);
   }
@@ -65,22 +65,22 @@ async function get(url: string): Promise<string> {
   return result.data;
 }
 
-async function parse(string: string): Promise<IExchangeRateResult[]> {
-  const data = await xml2js.parseStringPromise(string);
+export function parse(string: string): IExchangeRateResult[] {
+  const data = new XMLParser({ ignoreAttributes: false, isArray: () => true }).parse(string);
   const result: IExchangeRateResult[] = [];
-  const entries = data['gesmes:Envelope']['Cube'][0]['Cube'];
+  const entries = data['gesmes:Envelope'][0]['Cube'][0]['Cube'];
   if (typeof entries !== 'object') {
     throw new Error('Result data does not have the expected structure');
   }
 
   for (const current of entries) {
-    const time = current?.['$']?.['time'];
+    const time = current?.['@_time']?.[0];
     assertString(time, 'time');
     const rates = {} as any;
     for (const item of current['Cube']) {
-      const currency = item['$']['currency'];
+      const currency = item['@_currency']?.[0];
       assertString(currency, 'curency');
-      const rateString = item['$']['rate'];
+      const rateString = item['@_rate']?.[0];
       assertString(rateString, 'rate');
       const rate = parseFloat(rateString);
       rates[currency] = rate;
