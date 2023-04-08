@@ -63,6 +63,8 @@ Historic rates are available via `fetchHistoric90d` (fetches previous 90 days) a
 
 ## Development
 
+Use [Volta](https://volta.sh).
+
 Install NPM dependencies with `yarn`.
 
 To execute the tests, run `yarn test`.
