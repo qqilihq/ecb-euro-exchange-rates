@@ -10,8 +10,41 @@ describe('ECB exchange rates', () => {
       const result = await exchangeRates.fetch();
       expect(result).toBeObject();
       expect(result.time).toBeString();
+      expect(result.time).toMatch(/\d{4}-\d{2}-\d{2}/);
       expect(result.rates).toBeObject();
       expect(result.rates.USD).toBeNumber();
+      expect(result.rates).toContainKeys([
+        'USD',
+        'JPY',
+        'BGN',
+        'CZK',
+        'DKK',
+        'GBP',
+        'HUF',
+        'PLN',
+        'RON',
+        'SEK',
+        'CHF',
+        'ISK',
+        'NOK',
+        'TRY',
+        'AUD',
+        'BRL',
+        'CAD',
+        'CNY',
+        'HKD',
+        'IDR',
+        'ILS',
+        'INR',
+        'KRW',
+        'MXN',
+        'MYR',
+        'NZD',
+        'PHP',
+        'SGD',
+        'THB',
+        'ZAR'
+      ]);
     });
 
     it('retrieves historic exchange rates', async () => {
