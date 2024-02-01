@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           # Version Spec of the version to use.  Examples: 10.x, 10.15.1, >=10.15.0
           node-version: ">=18"
@@ -24,7 +24,7 @@ jobs:
           yarn run jest --ci --reporters=jest-junit --reporters=default --coverage
           yarn build
 
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v4
         with:
           file: ./coverage/coverage-final.json
           fail_ci_if_error: true
