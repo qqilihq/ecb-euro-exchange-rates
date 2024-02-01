@@ -57,7 +57,7 @@ describe('ECB exchange rates', () => {
       expect(result.time).toMatch(/\d{4}-\d{2}-\d{2}/);
       expect(result.rates).toBeObject();
       expect(result.rates.USD).toBeNumber();
-      expect(result.rates).toContainKeys([
+      expect(result.rates).toContainAllKeys([
         'USD',
         'JPY',
         'BGN',
