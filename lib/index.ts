@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
 
 export interface IExchangeRates {
@@ -61,8 +60,8 @@ export async function fetchHistoric90d(): Promise<IExchangeRateResult[]> {
 }
 
 async function get(url: string): Promise<string> {
-  const result = await axios.get<string>(url);
-  return result.data;
+  const result = await global.fetch(url);
+  return await result.text();
 }
 
 export function parse(string: string): IExchangeRateResult[] {
