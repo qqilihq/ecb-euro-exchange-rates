@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Require NodeJS 18
 - Use native `fetch` instead of axios library
 
+### Fixed
+- Update dependencies
+
 ## [3.0.0] – 2023-04-08
 ### Changed
 - Require NodeJS 14

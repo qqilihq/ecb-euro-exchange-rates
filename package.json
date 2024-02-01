@@ -30,7 +30,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "fast-xml-parser": "^4.1.4"
+    "fast-xml-parser": "^4.3.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
