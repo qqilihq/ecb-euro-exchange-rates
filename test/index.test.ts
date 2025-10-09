@@ -1,16 +1,16 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as exchangeRates from '../lib/index';
-import 'jest-extended';
 import fs from 'fs';
 import path from 'path';
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
 
-describe('ECB exchange rates', () => {
-  // retrieving the history takes a bit of time
-  jest.setTimeout(60 * 1000 /* 60 seconds */);
-
+// retrieving the history takes a bit of time
+describe('ECB exchange rates', { timeout: 60_000 }, () => {
   it('parses XML', async () => {
     const xml = await fs.promises.readFile(path.join(__dirname, 'eurofxref-daily.xml'), { encoding: 'utf8' });
     const parsed = exchangeRates.parse(xml);
-    expect(parsed).toEqual([
+    assert.deepEqual(parsed, [
       {
         time: '2023-04-06',
         rates: {
@@ -52,12 +52,12 @@ describe('ECB exchange rates', () => {
   describe('retrieve exchange rates', function () {
     it('retrieves exchange rates', async () => {
       const result = await exchangeRates.fetch();
-      expect(result).toBeObject();
-      expect(result.time).toBeString();
-      expect(result.time).toMatch(/\d{4}-\d{2}-\d{2}/);
-      expect(result.rates).toBeObject();
-      expect(result.rates.USD).toBeNumber();
-      expect(result.rates).toContainAllKeys([
+      assert.equal(typeof result, 'object');
+      assert.equal(typeof result.time, 'string');
+      assert.match(result.time, /\d{4}-\d{2}-\d{2}/);
+      assert.equal(typeof result.rates, 'object');
+      assert.equal(typeof result.rates.USD, 'number');
+      assert.deepEqual(Object.keys(result.rates), [
         'USD',
         'JPY',
         'BGN',
@@ -93,23 +93,23 @@ describe('ECB exchange rates', () => {
 
     it('retrieves historic exchange rates', async () => {
       const result = await exchangeRates.fetchHistoric90d();
-      expect(result).toBeArray();
-      expect(result.length).toBeGreaterThan(50);
-      expect(result[0]).toBeObject();
-      expect(result[0].time).toBeString();
-      expect(result[0].rates).toBeObject();
-      expect(result[0].rates.USD).toBeNumber();
+      assert.equal(Array.isArray(result), true);
+      assert.equal(result.length > 50, true);
+      assert.equal(typeof result[0], 'object');
+      assert.equal(typeof result[0].time, 'string');
+      assert.equal(typeof result[0].rates, 'object');
+      assert.equal(typeof result[0].rates.USD, 'number');
     });
 
     it('retrieves all historic exchange rates', async () => {
       const result = await exchangeRates.fetchHistoric();
-      expect(result).toBeArray();
-      expect(result.length).toBeGreaterThan(5000);
-      expect(result[0]).toBeObject();
-      expect(result[0].time).toBeString();
-      expect(result[0].rates).toBeObject();
-      expect(result[0].rates.USD).toBeNumber();
-      expect(result[result.length - 1].time).toEqual('1999-01-04');
+      assert.equal(Array.isArray(result), true);
+      assert.equal(result.length > 5000, true);
+      assert.equal(typeof result[0], 'object');
+      assert.equal(typeof result[0].time, 'string');
+      assert.equal(typeof result[0].rates, 'object');
+      assert.equal(typeof result[0].rates.USD, 'number');
+      assert.equal(result[result.length - 1].time, '1999-01-04');
     });
   });
 });

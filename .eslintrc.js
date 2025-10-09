@@ -2,7 +2,6 @@ module.exports = {
   env: {
     node: true,
     es6: true,
-    jest: true
   },
   extends: [
     // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#recommended-configs

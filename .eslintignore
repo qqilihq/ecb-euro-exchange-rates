@@ -4,4 +4,3 @@
 # https://stackoverflow.com/a/60840108
 .eslintrc.js
 commitlint.config.js
-jest.config.js

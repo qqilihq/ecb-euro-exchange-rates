@@ -21,7 +21,7 @@ jobs:
           yarn install
           yarn lint
           # https://stackoverflow.com/a/52357797/388827
-          yarn run jest --ci --reporters=jest-junit --reporters=default --coverage
+          yarn run c8 --reporter=json node --require tsx/cjs --test ./test/index.test.ts
           yarn build
 
       - uses: codecov/codecov-action@v4
