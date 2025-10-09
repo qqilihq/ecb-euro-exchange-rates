@@ -40,10 +40,12 @@ export interface IExchangeRateResult {
   rates: IExchangeRates;
 }
 
+const baseUrl = 'https://www.ecb.europa.eu/stats/eurofxref';
+
 // http://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html
 
 export async function fetch(): Promise<IExchangeRateResult> {
-  const result = await get('http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml');
+  const result = await get(`${baseUrl}/eurofxref-daily.xml`);
   const rates = parse(result);
   if (rates.length !== 1) {
     throw new Error(`Expected result to contain one single entry, but got ${rates.length}`);
@@ -52,11 +54,11 @@ export async function fetch(): Promise<IExchangeRateResult> {
 }
 
 export async function fetchHistoric(): Promise<IExchangeRateResult[]> {
-  return parse(await get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml'));
+  return parse(await get(`${baseUrl}/eurofxref-hist.xml`));
 }
 
 export async function fetchHistoric90d(): Promise<IExchangeRateResult[]> {
-  return parse(await get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml'));
+  return parse(await get(`${baseUrl}/eurofxref-hist-90d.xml`));
 }
 
 async function get(url: string): Promise<string> {
