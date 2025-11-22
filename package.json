@@ -26,7 +26,7 @@
     "test:coverage": "c8 --reporter=html node --require tsx/cjs --test ./test/index.test.ts",
     "lint": "eslint --ext .ts ./lib ./test",
     "build": "tsc -p tsconfig.build.json",
-    "clean": "rimraf ./coverage ./dist",
+    "clean": "node -e \"['./coverage', './dist'].forEach(entry => require('fs').rmSync(entry, { recursive: true, force: true }));\"",
     "preversion": "run-s clean lint test build",
     "prepare": "husky install"
   },
