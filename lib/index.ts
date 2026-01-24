@@ -3,7 +3,6 @@ import { XMLParser } from 'fast-xml-parser';
 export interface IExchangeRates {
   USD: number;
   JPY: number;
-  BGN: number;
   CZK: number;
   DKK: number;
   GBP: number;

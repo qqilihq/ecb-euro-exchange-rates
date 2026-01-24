@@ -60,7 +60,6 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       assert.deepEqual(Object.keys(result.rates), [
         'USD',
         'JPY',
-        'BGN',
         'CZK',
         'DKK',
         'GBP',

@@ -10,7 +10,6 @@ The API provides exchange rates updated daily for the following currencies:
 
 * **USD**: US dollar
 * **JPY**: Japanese yen
-* **BGN**: Bulgarian lev
 * **CZK**: Czech koruna
 * **DKK**: Danish krone
 * **GBP**: Pound sterling
