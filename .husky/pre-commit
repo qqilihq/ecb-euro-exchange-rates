@@ -1,2 +1,2 @@
-#!/bin/sh
-pnpm run lint
+# lint-staged covers the staged files; the type check is whole-project by nature
+pnpm exec lint-staged && pnpm run lint:types
