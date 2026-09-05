@@ -13,8 +13,6 @@ export interface IExchangeRates {
   CHF: number;
   ISK: number;
   NOK: number;
-  HRK: number;
-  RUB: number;
   TRY: number;
   AUD: number;
   BRL: number;

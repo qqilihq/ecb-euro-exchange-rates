@@ -20,8 +20,6 @@ The API provides exchange rates updated daily for the following currencies:
 - **CHF**: Swiss franc
 - **ISK**: Icelandic krona
 - **NOK**: Norwegian krone
-- **HRK**: Croatian kuna
-- **RUB**: Russian rouble
 - **TRY**: Turkish lira
 - **AUD**: Australian dollar
 - **BRL**: Brazilian real

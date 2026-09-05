@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Remove HRK and RUB from response typing (API does not longer provide these — Croatia joined the euro area on 1 January 2023, and the ECB suspended publication of RUB reference rates in March 2022)
+
 ### Changed
 
 - Require NodeJS 22
