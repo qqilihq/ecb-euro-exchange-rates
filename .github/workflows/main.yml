@@ -5,19 +5,25 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # the oldest supported version (`engines.node`) and the current Active LTS
+        node-version: ['22.x', '24.x']
+
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # reads the pnpm version from the `packageManager` field
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          # Version Spec of the version to use.  Examples: 10.x, 10.15.1, >=10.15.0
-          node-version: ">=18"
+          node-version: ${{ matrix.node-version }}
           cache: pnpm
 
       - name: Lint, test, and build
@@ -27,9 +33,11 @@ jobs:
           pnpm run test:coverage
           pnpm run build
 
-      - uses: codecov/codecov-action@v4
+      # only report coverage once, rather than once per matrix entry
+      - uses: codecov/codecov-action@v5
+        if: matrix.node-version == '24.x'
         with:
-          file: ./coverage/coverage-final.json
+          files: ./coverage/coverage-final.json
           fail_ci_if_error: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
