@@ -43,7 +43,7 @@ The API provides exchange rates updated daily for the following currencies:
 ## Installation
 
 ```shell
-$ yarn add ecb-euro-exchange-rates
+$ pnpm add ecb-euro-exchange-rates
 ```
 
 ## Usage
@@ -62,11 +62,11 @@ Historic rates are available via `fetchHistoric90d` (fetches previous 90 days) a
 
 ## Development
 
-Use [Volta](https://volta.sh).
+Node.js and pnpm are pinned in `package.json` (`devEngines.runtime` and `packageManager`); pnpm downloads the pinned Node.js version itself, so no separate version manager is needed.
 
-Install NPM dependencies with `yarn`.
+Install dependencies with `pnpm install`.
 
-To execute the tests, run `yarn test`.
+To execute the tests, run `pnpm test`. To lint, run `pnpm run lint`.
 
 For the best development experience, make sure that your editor supports [ESLint](https://eslint.org/docs/user-guide/integrations) and [EditorConfig](http://editorconfig.org).
 
@@ -78,7 +78,7 @@ Commit all changes and run the following:
 
 ```shell
 $ npm login
-$ yarn version --<update_type>
+$ pnpm run release --<update_type>
 $ npm publish
 ```
 
