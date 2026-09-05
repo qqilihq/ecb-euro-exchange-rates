@@ -2,8 +2,9 @@ import eslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import eslintPluginN from 'eslint-plugin-n';
-// includes eslint-config-prettier, so that does not need to be listed separately
-import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
+// turns off the rules that would fight Prettier; Prettier itself runs as its
+// own `lint:format` script rather than as an ESLint rule
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default defineConfig(
   {
@@ -13,7 +14,7 @@ export default defineConfig(
   eslint.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
   eslintPluginN.configs['flat/recommended'],
-  eslintPluginPrettier,
+  eslintConfigPrettier,
   {
     languageOptions: {
       parserOptions: {
