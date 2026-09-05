@@ -77,12 +77,16 @@ Linting of code and commit message happens on commit via [Husky](https://github.
 Commit all changes and run the following:
 
 ```shell
-$ npm login
+$ pnpm login
 $ pnpm run release <update_type>
-$ npm publish
+$ pnpm publish
 ```
 
 … where `<update_type>` is one of `patch`, `minor`, or `major`. This will update the `package.json`, and create a tagged Git commit with the version number.
+
+Use `pnpm`, not `npm`, for these. Because the project pins its Node version through
+`devEngines.runtime`, npm refuses to run anything here (`EBADDEVENGINES`) unless the
+ambient Node happens to match that exact version.
 
 ## Contributing
 
