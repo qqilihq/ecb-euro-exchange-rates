@@ -76,6 +76,27 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       assert.equal(typeof result[0]!.time, 'string');
       assert.equal(typeof result[0]!.rates, 'object');
       assert.equal(typeof result[0]!.rates.USD, 'number');
+
+      // A 90-day window cannot be checked like the full history, because it contains
+      // none of the discontinued currencies. What must hold is that it introduces no
+      // code outside the two exported lists, and that every current currency appears
+      // somewhere in it. Both survive a retirement, when the window keeps carrying the
+      // retired currency for up to 90 days after it leaves `currencies`.
+      const known: readonly string[] = [...exchangeRates.currencies, ...exchangeRates.discontinuedCurrencies];
+      const union = new Set<string>();
+      for (const entry of result) {
+        for (const code of Object.keys(entry.rates)) union.add(code);
+      }
+      assert.deepEqual(
+        [...union].filter(code => !known.includes(code)),
+        [],
+        'the 90-day feed contains currencies that are in neither exported list'
+      );
+      assert.deepEqual(
+        exchangeRates.currencies.filter(code => !union.has(code)),
+        [],
+        'the 90-day feed is missing currencies that are listed as current'
+      );
     });
 
     it('retrieves all historic exchange rates', async () => {
