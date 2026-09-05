@@ -121,7 +121,9 @@ export async function fetchHistoric90d(): Promise<IHistoricExchangeRateResult[]>
 }
 
 async function get(url: string): Promise<string> {
-  const result = await global.fetch(url);
+  // Qualified because this module's own exported `fetch` shadows the global one
+  // here -- a bare `fetch(url)` would recurse into it. See #65.
+  const result = await globalThis.fetch(url);
   return await result.text();
 }
 
