@@ -78,7 +78,7 @@ Commit all changes and run the following:
 
 ```shell
 $ npm login
-$ pnpm run release --<update_type>
+$ pnpm run release <update_type>
 $ npm publish
 ```
 
