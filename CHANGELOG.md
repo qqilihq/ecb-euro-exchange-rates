@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [6.0.0] – 2026-09-05
 
 ### Added
 
@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `fetchHistoric`, `fetchHistoric90d` and `parse` now return `IHistoricExchangeRateResult`, whose rates are optional — which currencies a historic entry carries depends on its date
+- `IExchangeRates` is now a type alias derived from `currencies` rather than an interface, so it can no longer be extended through declaration merging
 - Require NodeJS 22
 
 ## [5.0.0] – 2026-01-24
@@ -88,7 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This CHANGELOG file
 - Allow querying for historical data using `fetchHistoric` and `fetchHistoric90d`
 
-[unreleased]: https://github.com/qqilihq/ecb-euro-exchange-rates/compare/v5.0.0...HEAD
+[unreleased]: https://github.com/qqilihq/ecb-euro-exchange-rates/compare/v6.0.0...HEAD
+[6.0.0]: https://github.com/qqilihq/ecb-euro-exchange-rates/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/qqilihq/ecb-euro-exchange-rates/compare/v4.0.1...v5.0.0
 [4.0.1]: https://github.com/qqilihq/ecb-euro-exchange-rates/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/qqilihq/ecb-euro-exchange-rates/compare/v3.0.0...v4.0.0
