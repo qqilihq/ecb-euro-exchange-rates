@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Remove HRK and RUB from response typing (the API no longer provides these — Croatia joined the euro area on 1 January 2023, and the ECB suspended publication of RUB reference rates in March 2022)
+- Remove HRK and RUB from the daily response typing `IExchangeRates` — the ECB no longer publishes either (Croatia joined the euro area on 1 January 2023, and RUB reference rates were suspended in March 2022). Both remain available on historic results, which still return them for past dates.
 
 ### Changed
 
