@@ -41,7 +41,7 @@ The API provides exchange rates updated daily for the following currencies:
 ## Installation
 
 ```shell
-$ pnpm add ecb-euro-exchange-rates
+$ npm install ecb-euro-exchange-rates
 ```
 
 ## Usage
