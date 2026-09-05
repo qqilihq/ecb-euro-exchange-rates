@@ -1,36 +1,53 @@
 import { XMLParser } from 'fast-xml-parser';
 
-export interface IExchangeRates {
-  USD: number;
-  JPY: number;
-  CZK: number;
-  DKK: number;
-  GBP: number;
-  HUF: number;
-  PLN: number;
-  RON: number;
-  SEK: number;
-  CHF: number;
-  ISK: number;
-  NOK: number;
-  TRY: number;
-  AUD: number;
-  BRL: number;
-  CAD: number;
-  CNY: number;
-  HKD: number;
-  IDR: number;
-  ILS: number;
-  INR: number;
-  KRW: number;
-  MXN: number;
-  MYR: number;
-  NZD: number;
-  PHP: number;
-  SGD: number;
-  THB: number;
-  ZAR: number;
-}
+/**
+ * The currencies for which the ECB publishes reference rates, in the order the
+ * API returns them.
+ *
+ * This array is the single source of truth: {@link Currency} and
+ * {@link IExchangeRates} are derived from it, and the tests compare it against
+ * both the live API and the list in the readme.
+ *
+ * It is deliberately *not* enforced at runtime. If the ECB adds or drops a
+ * currency, {@link parse} keeps returning whatever the API provides rather
+ * than throwing at consumers; the failing test is the signal to update this
+ * list and cut a release.
+ */
+export const currencies = [
+  'USD',
+  'JPY',
+  'CZK',
+  'DKK',
+  'GBP',
+  'HUF',
+  'PLN',
+  'RON',
+  'SEK',
+  'CHF',
+  'ISK',
+  'NOK',
+  'TRY',
+  'AUD',
+  'BRL',
+  'CAD',
+  'CNY',
+  'HKD',
+  'IDR',
+  'ILS',
+  'INR',
+  'KRW',
+  'MXN',
+  'MYR',
+  'NZD',
+  'PHP',
+  'SGD',
+  'THB',
+  'ZAR'
+] as const;
+
+export type Currency = (typeof currencies)[number];
+
+export type IExchangeRates = Record<Currency, number>;
 
 export interface IExchangeRateResult {
   time: string;
