@@ -7,8 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Export `currencies`, the list of supported currency codes, and the `Currency` type derived from it
+- Export `discontinuedCurrencies` and the `HistoricCurrency` type, covering codes that occur only in the historic feeds
+
+### Removed
+
+- Remove HRK and RUB from the daily response typing `IExchangeRates` — the ECB no longer publishes either (Croatia joined the euro area on 1 January 2023, and RUB reference rates were suspended in March 2022). Both remain available on historic results, which still return them for past dates.
+
 ### Changed
 
+- `fetchHistoric`, `fetchHistoric90d` and `parse` now return `IHistoricExchangeRateResult`, whose rates are optional — which currencies a historic entry carries depends on its date
 - Require NodeJS 22
 
 ## [5.0.0] – 2026-01-24
