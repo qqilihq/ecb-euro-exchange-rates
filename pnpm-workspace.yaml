@@ -1,0 +1,6 @@
+# Single-package repository, so there is no `packages:` list here; this file
+# exists because pnpm 11 reads its settings from it.
+
+allowBuilds:
+  # builds the native binary that tsx uses to run the TypeScript tests
+  esbuild: true

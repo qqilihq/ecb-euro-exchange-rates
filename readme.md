@@ -8,42 +8,42 @@ Retrieve Euro foreign exchange reference rates from an [API](http://www.ecb.euro
 
 The API provides exchange rates updated daily for the following currencies:
 
-* **USD**: US dollar
-* **JPY**: Japanese yen
-* **CZK**: Czech koruna
-* **DKK**: Danish krone
-* **GBP**: Pound sterling
-* **HUF**: Hungarian forint
-* **PLN**: Polish zloty
-* **RON**: Romanian leu
-* **SEK**: Swedish krona
-* **CHF**: Swiss franc
-* **ISK**: Icelandic krona
-* **NOK**: Norwegian krone
-* **HRK**: Croatian kuna
-* **RUB**: Russian rouble
-* **TRY**: Turkish lira
-* **AUD**: Australian dollar
-* **BRL**: Brazilian real
-* **CAD**: Canadian dollar
-* **CNY**: Chinese yuan renminbi
-* **HKD**: Hong Kong dollar
-* **IDR**: Indonesian rupiah
-* **ILS**: Israeli shekel
-* **INR**: Indian rupee
-* **KRW**: South Korean won
-* **MXN**: Mexican peso
-* **MYR**: Malaysian ringgit
-* **NZD**: New Zealand dollar
-* **PHP**: Philippine piso
-* **SGD**: Singapore dollar
-* **THB**: Thai baht
-* **ZAR**: South African rand
+- **USD**: US dollar
+- **JPY**: Japanese yen
+- **CZK**: Czech koruna
+- **DKK**: Danish krone
+- **GBP**: Pound sterling
+- **HUF**: Hungarian forint
+- **PLN**: Polish zloty
+- **RON**: Romanian leu
+- **SEK**: Swedish krona
+- **CHF**: Swiss franc
+- **ISK**: Icelandic krona
+- **NOK**: Norwegian krone
+- **HRK**: Croatian kuna
+- **RUB**: Russian rouble
+- **TRY**: Turkish lira
+- **AUD**: Australian dollar
+- **BRL**: Brazilian real
+- **CAD**: Canadian dollar
+- **CNY**: Chinese yuan renminbi
+- **HKD**: Hong Kong dollar
+- **IDR**: Indonesian rupiah
+- **ILS**: Israeli shekel
+- **INR**: Indian rupee
+- **KRW**: South Korean won
+- **MXN**: Mexican peso
+- **MYR**: Malaysian ringgit
+- **NZD**: New Zealand dollar
+- **PHP**: Philippine piso
+- **SGD**: Singapore dollar
+- **THB**: Thai baht
+- **ZAR**: South African rand
 
 ## Installation
 
 ```shell
-$ yarn add ecb-euro-exchange-rates
+$ pnpm add ecb-euro-exchange-rates
 ```
 
 ## Usage
@@ -62,11 +62,11 @@ Historic rates are available via `fetchHistoric90d` (fetches previous 90 days) a
 
 ## Development
 
-Use [Volta](https://volta.sh).
+Node.js and pnpm are pinned in `package.json` (`devEngines.runtime` and `packageManager`); pnpm downloads the pinned Node.js version itself, so no separate version manager is needed.
 
-Install NPM dependencies with `yarn`.
+Install dependencies with `pnpm install`.
 
-To execute the tests, run `yarn test`.
+To execute the tests, run `pnpm test`. To lint, run `pnpm run lint`.
 
 For the best development experience, make sure that your editor supports [ESLint](https://eslint.org/docs/user-guide/integrations) and [EditorConfig](http://editorconfig.org).
 
@@ -78,7 +78,7 @@ Commit all changes and run the following:
 
 ```shell
 $ npm login
-$ yarn version --<update_type>
+$ pnpm run release <update_type>
 $ npm publish
 ```
 
@@ -88,7 +88,6 @@ $ npm publish
 
 Pull requests are very welcome. Feel free to discuss bugs or new features by opening a new [issue](https://github.com/qqilihq/ecb-euro-exchange-rates/issues).
 
-
-- - -
+---
 
 Copyright Philipp Katz, [LineUpr GmbH](http://lineupr.com), 2018 – 2026

@@ -46,10 +46,13 @@ const baseUrl = 'https://www.ecb.europa.eu/stats/eurofxref';
 export async function fetch(): Promise<IExchangeRateResult> {
   const result = await get(`${baseUrl}/eurofxref-daily.xml`);
   const rates = parse(result);
-  if (rates.length !== 1) {
+  const [first] = rates;
+  // `first` is checked as well as the length, because indexed access is not
+  // narrowed by the length check under `noUncheckedIndexedAccess`
+  if (rates.length !== 1 || !first) {
     throw new Error(`Expected result to contain one single entry, but got ${rates.length}`);
   }
-  return rates[0];
+  return first;
 }
 
 export async function fetchHistoric(): Promise<IExchangeRateResult[]> {
@@ -103,5 +106,8 @@ if (require.main === module) {
   (async () => {
     const result = await fetch();
     console.log(JSON.stringify(result, null, 2));
-  })().catch(() => process.exit(1));
+  })().catch(() => {
+    // eslint-disable-next-line n/no-process-exit -- CLI entry point; a non-zero exit code is the contract
+    process.exit(1);
+  });
 }

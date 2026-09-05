@@ -5,28 +5,33 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
+      # reads the pnpm version from the `packageManager` field
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      # `.node-version` matches `devEngines.runtime`, which is the version pnpm
+      # uses for every `pnpm run` regardless of what is set up here
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          # Version Spec of the version to use.  Examples: 10.x, 10.15.1, >=10.15.0
-          node-version: ">=18"
+          node-version-file: .node-version
+          cache: pnpm
 
       - name: Lint, test, and build
         run: |
-          npm install -g yarn
-          yarn install
-          yarn lint
-          # https://stackoverflow.com/a/52357797/388827
-          yarn run c8 --reporter=json node --require tsx/cjs --test ./test/index.test.ts
-          yarn build
+          pnpm install --frozen-lockfile
+          pnpm run lint
+          pnpm run test:coverage
+          pnpm run build
 
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
-          file: ./coverage/coverage-final.json
+          files: ./coverage/coverage-final.json
           fail_ci_if_error: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

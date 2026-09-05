@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import * as exchangeRates from '../lib/index';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 
@@ -95,9 +95,9 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       assert.equal(Array.isArray(result), true);
       assert.equal(result.length > 50, true);
       assert.equal(typeof result[0], 'object');
-      assert.equal(typeof result[0].time, 'string');
-      assert.equal(typeof result[0].rates, 'object');
-      assert.equal(typeof result[0].rates.USD, 'number');
+      assert.equal(typeof result[0]!.time, 'string');
+      assert.equal(typeof result[0]!.rates, 'object');
+      assert.equal(typeof result[0]!.rates.USD, 'number');
     });
 
     it('retrieves all historic exchange rates', async () => {
@@ -105,10 +105,10 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       assert.equal(Array.isArray(result), true);
       assert.equal(result.length > 5000, true);
       assert.equal(typeof result[0], 'object');
-      assert.equal(typeof result[0].time, 'string');
-      assert.equal(typeof result[0].rates, 'object');
-      assert.equal(typeof result[0].rates.USD, 'number');
-      assert.equal(result[result.length - 1].time, '1999-01-04');
+      assert.equal(typeof result[0]!.time, 'string');
+      assert.equal(typeof result[0]!.rates, 'object');
+      assert.equal(typeof result[0]!.rates.USD, 'number');
+      assert.equal(result[result.length - 1]!.time, '1999-01-04');
     });
   });
 });
