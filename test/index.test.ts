@@ -87,6 +87,23 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       assert.equal(typeof result[0]!.rates, 'object');
       assert.equal(typeof result[0]!.rates.USD, 'number');
       assert.equal(result[result.length - 1]!.time, '1999-01-04');
+
+      // the union across the whole history must match the two exported lists, so a
+      // currency appearing or disappearing upstream shows up here instead of
+      // silently widening the runtime shape beyond what the types describe
+      const union = new Set<string>();
+      for (const entry of result) {
+        for (const code of Object.keys(entry.rates)) union.add(code);
+      }
+      assert.deepEqual(
+        [...union].sort(),
+        [...exchangeRates.currencies, ...exchangeRates.discontinuedCurrencies].sort()
+      );
+
+      // why the historic rates are optional: the oldest entry predates several of
+      // the currencies published today
+      const oldest = result[result.length - 1]!;
+      assert.equal(Object.keys(oldest.rates).length < exchangeRates.currencies.length, true);
     });
   });
 });

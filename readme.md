@@ -58,6 +58,8 @@ console.log('USD: ' + result.rates.USD);
 
 Historic rates are available via `fetchHistoric90d` (fetches previous 90 days) and `fetchHistoric` (fetches **all** rates back to 1999).
 
+Historic responses do not always carry the same currencies as the daily one: they may include currencies the ECB has since stopped publishing (HRK and RUB, for example), and they omit currencies that were not yet published at the time — the oldest entry, from January 1999, holds 27 rates. Their rates are therefore typed as optional, and the full set of codes that can occur is exported as `currencies` and `discontinuedCurrencies`.
+
 ## Development
 
 Node.js and pnpm are pinned in `package.json` (`devEngines.runtime` and `packageManager`); pnpm downloads the pinned Node.js version itself, so no separate version manager is needed.

@@ -1,8 +1,10 @@
 import { XMLParser } from 'fast-xml-parser';
 
 /**
- * The currencies for which the ECB publishes reference rates, in the order the
- * API returns them.
+ * The currencies the ECB publishes in its *current* daily feed, in the order
+ * the API returns them. Every one of these is present in a {@link fetch}
+ * result; historic results are a different matter, see
+ * {@link discontinuedCurrencies}.
  *
  * This array is the single source of truth: {@link Currency} and
  * {@link IExchangeRates} are derived from it, and the tests compare it against
@@ -47,11 +49,49 @@ export const currencies = [
 
 export type Currency = (typeof currencies)[number];
 
+/**
+ * Currencies that appear only in the historic feeds, because the ECB stopped
+ * publishing them — most because the country adopted the euro.
+ *
+ * Kept separate from {@link currencies} so the common case ({@link fetch}) does
+ * not have to account for rates that no current response can contain.
+ */
+export const discontinuedCurrencies = [
+  'BGN',
+  'CYP',
+  'EEK',
+  'HRK',
+  'LTL',
+  'LVL',
+  'MTL',
+  'ROL',
+  'RUB',
+  'SIT',
+  'SKK',
+  'TRL'
+] as const;
+
+export type HistoricCurrency = Currency | (typeof discontinuedCurrencies)[number];
+
+/** Rates from the daily feed, where every current currency is present. */
 export type IExchangeRates = Record<Currency, number>;
+
+/**
+ * Rates from a historic feed. Every rate is optional: which currencies a given
+ * day carries depends on the date. The 1999-01-04 entry, for instance, holds 27
+ * rates and is missing 11 of the currencies published today, because they were
+ * not yet part of the reference rates.
+ */
+export type IHistoricExchangeRates = Partial<Record<HistoricCurrency, number>>;
 
 export interface IExchangeRateResult {
   time: string;
   rates: IExchangeRates;
+}
+
+export interface IHistoricExchangeRateResult {
+  time: string;
+  rates: IHistoricExchangeRates;
 }
 
 const baseUrl = 'https://www.ecb.europa.eu/stats/eurofxref';
@@ -67,14 +107,16 @@ export async function fetch(): Promise<IExchangeRateResult> {
   if (rates.length !== 1 || !first) {
     throw new Error(`Expected result to contain one single entry, but got ${rates.length}`);
   }
-  return first;
+  // The daily feed always carries the full current set, so this is the one path
+  // that can promise every currency; the historic feeds cannot.
+  return first as IExchangeRateResult;
 }
 
-export async function fetchHistoric(): Promise<IExchangeRateResult[]> {
+export async function fetchHistoric(): Promise<IHistoricExchangeRateResult[]> {
   return parse(await get(`${baseUrl}/eurofxref-hist.xml`));
 }
 
-export async function fetchHistoric90d(): Promise<IExchangeRateResult[]> {
+export async function fetchHistoric90d(): Promise<IHistoricExchangeRateResult[]> {
   return parse(await get(`${baseUrl}/eurofxref-hist-90d.xml`));
 }
 
@@ -83,9 +125,9 @@ async function get(url: string): Promise<string> {
   return await result.text();
 }
 
-export function parse(string: string): IExchangeRateResult[] {
+export function parse(string: string): IHistoricExchangeRateResult[] {
   const data = new XMLParser({ ignoreAttributes: false, isArray: () => true }).parse(string);
-  const result: IExchangeRateResult[] = [];
+  const result: IHistoricExchangeRateResult[] = [];
   const entries = data['gesmes:Envelope'][0]['Cube'][0]['Cube'];
   if (typeof entries !== 'object') {
     throw new Error('Result data does not have the expected structure');

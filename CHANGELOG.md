@@ -10,13 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Export `currencies`, the list of supported currency codes, and the `Currency` type derived from it
+- Export `discontinuedCurrencies` and the `HistoricCurrency` type, covering codes that occur only in the historic feeds
 
 ### Removed
 
-- Remove HRK and RUB from response typing (API does not longer provide these — Croatia joined the euro area on 1 January 2023, and the ECB suspended publication of RUB reference rates in March 2022)
+- Remove HRK and RUB from response typing (the API no longer provides these — Croatia joined the euro area on 1 January 2023, and the ECB suspended publication of RUB reference rates in March 2022)
 
 ### Changed
 
+- `fetchHistoric`, `fetchHistoric90d` and `parse` now return `IHistoricExchangeRateResult`, whose rates are optional — which currencies a historic entry carries depends on its date
 - Require NodeJS 22
 
 ## [5.0.0] – 2026-01-24
