@@ -106,5 +106,8 @@ if (require.main === module) {
   (async () => {
     const result = await fetch();
     console.log(JSON.stringify(result, null, 2));
-  })().catch(() => process.exit(1));
+  })().catch(() => {
+    // eslint-disable-next-line n/no-process-exit -- CLI entry point; a non-zero exit code is the contract
+    process.exit(1);
+  });
 }

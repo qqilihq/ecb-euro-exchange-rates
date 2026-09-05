@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import * as exchangeRates from '../lib/index';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 
