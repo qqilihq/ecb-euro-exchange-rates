@@ -6,12 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        # the oldest supported version (`engines.node`) and the current Active LTS
-        node-version: ['22.x', '24.x']
-
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v5
@@ -20,10 +14,12 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
+      # `.node-version` matches `devEngines.runtime`, which is the version pnpm
+      # uses for every `pnpm run` regardless of what is set up here
       - name: Setup Node.js environment
         uses: actions/setup-node@v5
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .node-version
           cache: pnpm
 
       - name: Lint, test, and build
@@ -33,9 +29,7 @@ jobs:
           pnpm run test:coverage
           pnpm run build
 
-      # only report coverage once, rather than once per matrix entry
       - uses: codecov/codecov-action@v5
-        if: matrix.node-version == '24.x'
         with:
           files: ./coverage/coverage-final.json
           fail_ci_if_error: true
