@@ -104,6 +104,23 @@ const baseUrl = 'https://www.ecb.europa.eu/stats/eurofxref';
 
 // http://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html
 
+/**
+ * Retrieves the current daily reference rates, which the ECB publishes on
+ * working days at around 16:00 CET.
+ *
+ * Nothing is reported through the result: every failure rejects the promise,
+ * so wrap the call if a failed update should not take the caller down with it.
+ *
+ * | what happens | how it rejects |
+ * | --- | --- |
+ * | the request never completes -- DNS, refused connection, timeout | `TypeError` from `globalThis.fetch` |
+ * | the ECB answers with an error status | `Error: Request to … failed with status …` |
+ * | the body is not the expected feed | `Error: Result data does not have the expected structure` |
+ * | the feed carries other than exactly one entry | `Error: Expected result to contain one single entry, but got …` |
+ *
+ * @returns the rates for a single day, carrying every currency in
+ * {@link currencies}.
+ */
 export async function fetch(): Promise<IExchangeRateResult> {
   const result = await get(`${baseUrl}/eurofxref-daily.xml`);
   const rates = parse(result);
@@ -118,10 +135,30 @@ export async function fetch(): Promise<IExchangeRateResult> {
   return first as IExchangeRateResult;
 }
 
+/**
+ * Retrieves the complete history of reference rates, back to 1999-01-04. That
+ * is over 7,000 entries and a few megabytes of XML, so prefer
+ * {@link fetchHistoric90d} unless the whole series is needed.
+ *
+ * Rejects exactly as {@link fetch} does, minus the single-entry check.
+ *
+ * @returns one entry per published day, newest first. Rates are optional:
+ * which currencies an entry carries depends on its date.
+ */
 export async function fetchHistoric(): Promise<IHistoricExchangeRateResult[]> {
   return parse(await get(`${baseUrl}/eurofxref-hist.xml`));
 }
 
+/**
+ * Retrieves the reference rates of the last 90 days.
+ *
+ * Rejects exactly as {@link fetch} does, minus the single-entry check.
+ *
+ * @returns one entry per published day, newest first. Rates are optional
+ * because the type is shared with {@link fetchHistoric}; in practice a
+ * 90-day window carries the same currencies throughout, except across a
+ * change to {@link currencies}, which it keeps reporting for 90 days after.
+ */
 export async function fetchHistoric90d(): Promise<IHistoricExchangeRateResult[]> {
   return parse(await get(`${baseUrl}/eurofxref-hist-90d.xml`));
 }
@@ -141,6 +178,15 @@ async function get(url: string): Promise<string> {
   return await result.text();
 }
 
+/**
+ * Parses the XML of any of the three ECB feeds. Exported for callers that
+ * fetch the XML themselves -- through a proxy, or from a cache.
+ *
+ * @param string the raw XML body.
+ * @throws `Error` if the body is not one of the ECB feeds, or if an entry is
+ * missing its date, currency or rate. Note it is thrown, not returned: there
+ * is no error result to inspect.
+ */
 export function parse(string: string): IHistoricExchangeRateResult[] {
   const data = new XMLParser({ ignoreAttributes: false, isArray: () => true }).parse(string);
   const result: IHistoricExchangeRateResult[] = [];
