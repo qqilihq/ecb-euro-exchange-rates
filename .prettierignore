@@ -1,2 +1,4 @@
+# Comments and trailing commas that Prettier would rewrite
 tsconfig.*
+
 pnpm-lock.yaml

@@ -3,7 +3,7 @@ import * as exchangeRates from '../lib/index';
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert';
-import { describe, it } from 'node:test';
+import { afterEach, describe, it } from 'node:test';
 
 // retrieving the history takes a bit of time
 describe('ECB exchange rates', { timeout: 60_000 }, () => {
@@ -43,16 +43,58 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
           PHP: 59.562,
           SGD: 1.4507,
           THB: 37.171,
-          ZAR: 19.8929
-        }
-      }
+          ZAR: 19.8929,
+        },
+      },
     ]);
   });
 
   it('documents exactly the supported currencies in the readme', async () => {
     const readme = await fs.promises.readFile(path.join(__dirname, '..', 'readme.md'), { encoding: 'utf8' });
-    const documented = [...readme.matchAll(/^- \*\*([A-Z]{3})\*\*/gm)].map(match => match[1]);
+    const documented = [...readme.matchAll(/^- \*\*([A-Z]{3})\*\*/gm)].map((match) => match[1]);
     assert.deepEqual(documented.sort(), [...exchangeRates.currencies].sort());
+  });
+
+  it('freezes the exported currency lists', () => {
+    for (const list of [exchangeRates.currencies, exchangeRates.discontinuedCurrencies]) {
+      assert.equal(Object.isFrozen(list), true);
+      const before = [...list];
+      // The cast is what a JavaScript consumer gets for free: `readonly` is
+      // erased at runtime, so nothing stops the write except the freeze. It
+      // throws here because modules are strict mode; asserting the contents
+      // as well covers the sloppy-mode case, where it fails silently.
+      assert.throws(() => ((list as unknown as string[])[0] = 'HIJACKED'), TypeError);
+      assert.deepEqual([...list], before);
+    }
+  });
+
+  // `fetch` turns none of these into a result field, so the only contract a
+  // consumer has is which of them reject and with what -- the doc comments in
+  // `lib/index.ts` promise exactly this, and these tests pin it.
+  describe('failure modes', () => {
+    const realFetch = globalThis.fetch;
+    afterEach(() => {
+      globalThis.fetch = realFetch;
+    });
+
+    it('throws a described error when the body is not the ECB feed', () => {
+      // an HTML error page, which is what the ECB serves for a bad path
+      assert.throws(() => exchangeRates.parse('<!DOCTYPE html><html><body>404</body></html>'), {
+        name: 'Error',
+        message: 'Result data does not have the expected structure',
+      });
+    });
+
+    it('rejects when the request never completes', async () => {
+      globalThis.fetch = () => Promise.reject(new TypeError('fetch failed'));
+      await assert.rejects(exchangeRates.fetch(), TypeError);
+    });
+
+    it('rejects with the status when the service answers with an error', async () => {
+      globalThis.fetch = () =>
+        Promise.resolve(new Response('<html>oops</html>', { status: 503, statusText: 'Service Unavailable' }));
+      await assert.rejects(exchangeRates.fetch(), /failed with status 503 Service Unavailable/);
+    });
   });
 
   describe('retrieve exchange rates', function () {
@@ -88,14 +130,14 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
         for (const code of Object.keys(entry.rates)) union.add(code);
       }
       assert.deepEqual(
-        [...union].filter(code => !known.includes(code)),
+        [...union].filter((code) => !known.includes(code)),
         [],
-        'the 90-day feed contains currencies that are in neither exported list'
+        'the 90-day feed contains currencies that are in neither exported list',
       );
       assert.deepEqual(
-        exchangeRates.currencies.filter(code => !union.has(code)),
+        exchangeRates.currencies.filter((code) => !union.has(code)),
         [],
-        'the 90-day feed is missing currencies that are listed as current'
+        'the 90-day feed is missing currencies that are listed as current',
       );
     });
 
@@ -118,7 +160,7 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       }
       assert.deepEqual(
         [...union].sort(),
-        [...exchangeRates.currencies, ...exchangeRates.discontinuedCurrencies].sort()
+        [...exchangeRates.currencies, ...exchangeRates.discontinuedCurrencies].sort(),
       );
 
       // why the historic rates are optional: the oldest entry predates several of

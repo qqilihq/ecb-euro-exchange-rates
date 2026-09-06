@@ -1,6 +1,12 @@
 {
+  "parserPreset": {
+    "parserOpts": {
+      "headerPattern": "^(\\w*)(?:\\(([^)]*)\\))?(!)?: (.*)$",
+      "headerCorrespondence": ["type", "scope", "breaking", "subject"]
+    }
+  },
   "rules": {
-    "type-enum": [2, "always", ["breaking", "update", "new", "fix", "docs", "build", "upgrade", "chore"]],
+    "type-enum": [2, "always", ["breaking", "build", "chore", "ci", "docs", "feat", "fix", "new", "update", "upgrade"]],
     "type-empty": [2, "never"],
     "type-case": [2, "always", "lower-case"],
     "header-max-length": [1, "always", 72]

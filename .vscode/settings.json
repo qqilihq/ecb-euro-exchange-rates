@@ -1,4 +1,7 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  // Use the TypeScript pinned in devDependencies rather than the one bundled
+  // with the editor, so diagnostics match `pnpm run lint:types`.
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
