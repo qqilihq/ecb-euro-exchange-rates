@@ -3,7 +3,7 @@ import * as exchangeRates from '../lib/index';
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert';
-import { describe, it } from 'node:test';
+import { afterEach, describe, it } from 'node:test';
 
 // retrieving the history takes a bit of time
 describe('ECB exchange rates', { timeout: 60_000 }, () => {
@@ -66,6 +66,35 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       assert.throws(() => ((list as unknown as string[])[0] = 'HIJACKED'), TypeError);
       assert.deepEqual([...list], before);
     }
+  });
+
+  // `fetch` turns none of these into a result field, so the only contract a
+  // consumer has is which of them reject and with what -- the doc comments in
+  // `lib/index.ts` promise exactly this, and these tests pin it.
+  describe('failure modes', () => {
+    const realFetch = globalThis.fetch;
+    afterEach(() => {
+      globalThis.fetch = realFetch;
+    });
+
+    it('throws a described error when the body is not the ECB feed', () => {
+      // an HTML error page, which is what the ECB serves for a bad path
+      assert.throws(() => exchangeRates.parse('<!DOCTYPE html><html><body>404</body></html>'), {
+        name: 'Error',
+        message: 'Result data does not have the expected structure',
+      });
+    });
+
+    it('rejects when the request never completes', async () => {
+      globalThis.fetch = () => Promise.reject(new TypeError('fetch failed'));
+      await assert.rejects(exchangeRates.fetch(), TypeError);
+    });
+
+    it('rejects with the status when the service answers with an error', async () => {
+      globalThis.fetch = () =>
+        Promise.resolve(new Response('<html>oops</html>', { status: 503, statusText: 'Service Unavailable' }));
+      await assert.rejects(exchangeRates.fetch(), /failed with status 503 Service Unavailable/);
+    });
   });
 
   describe('retrieve exchange rates', function () {

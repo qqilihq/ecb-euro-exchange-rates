@@ -130,13 +130,24 @@ async function get(url: string): Promise<string> {
   // Qualified because this module's own exported `fetch` shadows the global one
   // here -- a bare `fetch(url)` would recurse into it. See #65.
   const result = await globalThis.fetch(url);
+  // `globalThis.fetch` rejects only when the request never completes; an error
+  // status resolves normally, and the ECB answers one with an HTML page. Left
+  // unchecked that page reaches `parse`, which fails with a bare
+  // `TypeError: Cannot read properties of undefined (reading '0')` -- true, and
+  // useless to whoever has to work out that the service was down.
+  if (!result.ok) {
+    throw new Error(`Request to ${url} failed with status ${result.status} ${result.statusText}`);
+  }
   return await result.text();
 }
 
 export function parse(string: string): IHistoricExchangeRateResult[] {
   const data = new XMLParser({ ignoreAttributes: false, isArray: () => true }).parse(string);
   const result: IHistoricExchangeRateResult[] = [];
-  const entries = data['gesmes:Envelope'][0]['Cube'][0]['Cube'];
+  // Optional chaining, or the guard below is unreachable: for any payload that
+  // is not the ECB feed, `data['gesmes:Envelope']` is `undefined` and indexing
+  // it throws a TypeError before the check runs.
+  const entries = data['gesmes:Envelope']?.[0]?.['Cube']?.[0]?.['Cube'];
   if (typeof entries !== 'object') {
     throw new Error('Result data does not have the expected structure');
   }
