@@ -38,12 +38,28 @@ function fail(message: string): never {
 function verifyChangelog(matchVersion: boolean): void {
   const changelog = fs.readFileSync(changelogPath, 'utf8');
   const today = new Date().toLocaleDateString('sv-SE');
+  const { version, repository } = JSON.parse(fs.readFileSync(packagePath, 'utf8')) as {
+    version: string;
+    repository: { url: string };
+  };
 
   const linkMatch = unreleasedLinkPattern.exec(changelog);
   if (!linkMatch) {
     fail('No `[unreleased]: …/compare/vX.Y.Z...HEAD` link reference was found.');
   }
   const [, repositoryUrl, linkedVersion] = linkMatch;
+
+  // The repository has to come from `package.json`, not from the changelog.
+  // Every link below is built from `repositoryUrl`, so taking it out of the
+  // file being checked would let a changelog that names the wrong repository
+  // consistently pass every one of those checks.
+  const expectedUrl = repository.url.replace(/^git\+/, '').replace(/\.git$/, '');
+  if (repositoryUrl !== expectedUrl) {
+    fail(
+      `The link references point at ${repositoryUrl}, but \`package.json\` declares\n` +
+        `${expectedUrl}. Repoint every \`[…]: …/compare/…\` line at:\n\n  ${expectedUrl}`,
+    );
+  }
 
   if (changelog.includes(unreleasedHeading)) {
     fail(
@@ -90,7 +106,6 @@ function verifyChangelog(matchVersion: boolean): void {
   }
 
   if (matchVersion) {
-    const { version } = JSON.parse(fs.readFileSync(packagePath, 'utf8')) as { version: string };
     if (version !== newestVersion) {
       fail(
         `The changelog is promoted to ${newestVersion}, but the release is ${version}.\n` +
