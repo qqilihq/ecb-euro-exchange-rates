@@ -55,6 +55,19 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
     assert.deepEqual(documented.sort(), [...exchangeRates.currencies].sort());
   });
 
+  it('freezes the exported currency lists', () => {
+    for (const list of [exchangeRates.currencies, exchangeRates.discontinuedCurrencies]) {
+      assert.equal(Object.isFrozen(list), true);
+      const before = [...list];
+      // The cast is what a JavaScript consumer gets for free: `readonly` is
+      // erased at runtime, so nothing stops the write except the freeze. It
+      // throws here because modules are strict mode; asserting the contents
+      // as well covers the sloppy-mode case, where it fails silently.
+      assert.throws(() => ((list as unknown as string[])[0] = 'HIJACKED'), TypeError);
+      assert.deepEqual([...list], before);
+    }
+  });
+
   describe('retrieve exchange rates', function () {
     it('retrieves exchange rates', async () => {
       const result = await exchangeRates.fetch();

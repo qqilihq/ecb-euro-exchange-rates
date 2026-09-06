@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Freeze the exported `currencies` and `discontinuedCurrencies` arrays. `readonly` is erased at runtime, so a consumer could previously write to the very arrays the library reads, changing what every other caller in the process saw
+
 ## [6.0.0] – 2026-09-05
 
 ### Added

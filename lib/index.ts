@@ -14,8 +14,12 @@ import { XMLParser } from 'fast-xml-parser';
  * currency, {@link parse} keeps returning whatever the API provides rather
  * than throwing at consumers; the failing test is the signal to update this
  * list and cut a release.
+ *
+ * Frozen, because `readonly` exists only in the type system: this is the very
+ * array the tests and consumers read, so a write to it would change what
+ * every other caller in the process sees.
  */
-export const currencies = [
+export const currencies = Object.freeze([
   'USD',
   'JPY',
   'CZK',
@@ -45,7 +49,7 @@ export const currencies = [
   'SGD',
   'THB',
   'ZAR',
-] as const;
+] as const);
 
 export type Currency = (typeof currencies)[number];
 
@@ -55,8 +59,10 @@ export type Currency = (typeof currencies)[number];
  *
  * Kept separate from {@link currencies} so the common case ({@link fetch}) does
  * not have to account for rates that no current response can contain.
+ *
+ * Frozen, for the same reason as {@link currencies}.
  */
-export const discontinuedCurrencies = [
+export const discontinuedCurrencies = Object.freeze([
   'BGN',
   'CYP',
   'EEK',
@@ -69,7 +75,7 @@ export const discontinuedCurrencies = [
   'SIT',
   'SKK',
   'TRL',
-] as const;
+] as const);
 
 export type HistoricCurrency = Currency | (typeof discontinuedCurrencies)[number];
 
