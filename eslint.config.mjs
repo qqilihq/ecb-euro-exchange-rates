@@ -36,20 +36,18 @@ export default defineConfig(
       // not part of eslint-plugin-n's recommended set, but cheap to keep honest
       'n/prefer-node-protocol': 'error',
 
+      // The rule resolves `package.json`'s `bin` the way Node would, so it
+      // compares `dist/cli.js` against the source path and concludes the CLI
+      // needs no shebang. Naming the source file as an executable tells it the
+      // truth, rather than switching the rule off: a shebang missing from
+      // `lib/cli.ts`, or present anywhere else, is still reported.
+      'n/hashbang': ['error', { additionalExecutables: ['lib/cli.ts'] }],
+
       // TypeScript resolves these imports (extensionless, and `.ts` once this
       // package moves to ESM); the rule resolves them the way Node would and
       // reports every one. `lint:types` already proves each import resolves.
       'n/no-missing-import': 'off',
     },
-  },
-  {
-    // `package.json`'s `bin` points at `dist/cli.js`, but the rule resolves it
-    // the way Node would and compares it against this source path, so it
-    // reports "this file needs no shebang" on the one file that needs one --
-    // same cause as the `n/no-missing-import` exception above. The shebang is
-    // checked on the built output instead, with `head -1 dist/cli.js`.
-    files: ['lib/cli.ts'],
-    rules: { 'n/hashbang': 'off' },
   },
   {
     // Type-aware rules are switched *off* here, not unavailable:
