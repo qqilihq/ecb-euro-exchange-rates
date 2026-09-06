@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/qqilihq/ecb-euro-exchange-rates.git"
+    "url": "git+https://github.com/qqilihq/ecb-euro-exchange-rates.git"
   },
   "keywords": [
     "euro",
