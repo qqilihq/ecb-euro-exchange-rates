@@ -27,9 +27,9 @@
     "typescript"
   ],
   "scripts": {
-    "test": "node --require tsx/cjs --test ./test/index.test.ts",
-    "test:watch": "node --require tsx/cjs --test --watch ./test/index.test.ts",
-    "test:coverage": "c8 --reporter=html --reporter=json node --require tsx/cjs --test ./test/index.test.ts",
+    "test": "node --require tsx/cjs --test ./test/*.test.ts",
+    "test:watch": "node --require tsx/cjs --test --watch ./test/*.test.ts",
+    "test:coverage": "c8 --reporter=html --reporter=json node --require tsx/cjs --test ./test/*.test.ts",
     "lint": "pnpm run lint:eslint && pnpm run lint:format && pnpm run lint:types && pnpm run lint:knip",
     "lint:eslint": "eslint .",
     "lint:format": "prettier --check .",
