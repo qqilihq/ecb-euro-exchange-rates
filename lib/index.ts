@@ -222,14 +222,3 @@ function assertString(value: unknown, valueName: string): asserts value is strin
     throw new Error(`Expected ${valueName} to be a string`);
   }
 }
-
-// CLI only when module is not require'd
-if (require.main === module) {
-  (async () => {
-    const result = await fetch();
-    console.log(JSON.stringify(result, null, 2));
-  })().catch(() => {
-    // eslint-disable-next-line n/no-process-exit -- CLI entry point; a non-zero exit code is the contract
-    process.exit(1);
-  });
-}
