@@ -9,7 +9,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 export default defineConfig(
   {
     // compiled output; not source
-    ignores: ['dist/**', 'coverage/**']
+    ignores: ['dist/**', 'coverage/**'],
   },
   eslint.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
@@ -19,8 +19,8 @@ export default defineConfig(
     languageOptions: {
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: import.meta.dirname
-      }
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     rules: {
       // warn when using APIs marked @deprecated in their JSDoc
@@ -39,8 +39,8 @@ export default defineConfig(
       // TypeScript resolves these imports (extensionless, and `.ts` once this
       // package moves to ESM); the rule resolves them the way Node would and
       // reports every one. `lint:types` already proves each import resolves.
-      'n/no-missing-import': 'off'
-    }
+      'n/no-missing-import': 'off',
+    },
   },
   {
     // this file is not part of any tsconfig, so type-aware rules cannot apply
@@ -50,7 +50,7 @@ export default defineConfig(
       // `engines.node` is the floor for consumers of the published package.
       // Config files are neither published nor run by them -- they run on the
       // version pinned in `devEngines.runtime` -- so they may use newer APIs.
-      'n/no-unsupported-features/node-builtins': 'off'
-    }
-  }
+      'n/no-unsupported-features/node-builtins': 'off',
+    },
+  },
 );

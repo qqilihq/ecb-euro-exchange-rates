@@ -43,15 +43,15 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
           PHP: 59.562,
           SGD: 1.4507,
           THB: 37.171,
-          ZAR: 19.8929
-        }
-      }
+          ZAR: 19.8929,
+        },
+      },
     ]);
   });
 
   it('documents exactly the supported currencies in the readme', async () => {
     const readme = await fs.promises.readFile(path.join(__dirname, '..', 'readme.md'), { encoding: 'utf8' });
-    const documented = [...readme.matchAll(/^- \*\*([A-Z]{3})\*\*/gm)].map(match => match[1]);
+    const documented = [...readme.matchAll(/^- \*\*([A-Z]{3})\*\*/gm)].map((match) => match[1]);
     assert.deepEqual(documented.sort(), [...exchangeRates.currencies].sort());
   });
 
@@ -88,14 +88,14 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
         for (const code of Object.keys(entry.rates)) union.add(code);
       }
       assert.deepEqual(
-        [...union].filter(code => !known.includes(code)),
+        [...union].filter((code) => !known.includes(code)),
         [],
-        'the 90-day feed contains currencies that are in neither exported list'
+        'the 90-day feed contains currencies that are in neither exported list',
       );
       assert.deepEqual(
-        exchangeRates.currencies.filter(code => !union.has(code)),
+        exchangeRates.currencies.filter((code) => !union.has(code)),
         [],
-        'the 90-day feed is missing currencies that are listed as current'
+        'the 90-day feed is missing currencies that are listed as current',
       );
     });
 
@@ -118,7 +118,7 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       }
       assert.deepEqual(
         [...union].sort(),
-        [...exchangeRates.currencies, ...exchangeRates.discontinuedCurrencies].sort()
+        [...exchangeRates.currencies, ...exchangeRates.discontinuedCurrencies].sort(),
       );
 
       // why the historic rates are optional: the oldest entry predates several of

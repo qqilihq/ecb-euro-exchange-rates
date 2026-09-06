@@ -44,7 +44,7 @@ export const currencies = [
   'PHP',
   'SGD',
   'THB',
-  'ZAR'
+  'ZAR',
 ] as const;
 
 export type Currency = (typeof currencies)[number];
@@ -68,7 +68,7 @@ export const discontinuedCurrencies = [
   'RUB',
   'SIT',
   'SKK',
-  'TRL'
+  'TRL',
 ] as const;
 
 export type HistoricCurrency = Currency | (typeof discontinuedCurrencies)[number];
