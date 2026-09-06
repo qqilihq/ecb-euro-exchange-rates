@@ -16,6 +16,9 @@ fetch()
   .catch((error: unknown) => {
     // Reported on stderr, so a pipeline's stdout carries only JSON.
     console.error(error instanceof Error ? error.message : error);
-    // eslint-disable-next-line n/no-process-exit -- CLI entry point; a non-zero exit code is the contract
-    process.exit(1);
+    // `process.exitCode` rather than `process.exit(1)`: writes to a piped
+    // stderr are asynchronous on macOS, and exiting outright discards whatever
+    // has not drained -- everything past the 64 KiB pipe buffer. Nothing else
+    // keeps the loop alive here, so the process still ends with status 1.
+    process.exitCode = 1;
   });

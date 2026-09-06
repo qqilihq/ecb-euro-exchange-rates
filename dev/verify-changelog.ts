@@ -28,9 +28,14 @@ const unreleasedLinkPattern = /^\[unreleased\]: (\S+)\/compare\/v(\S+)\.\.\.HEAD
 /** Reports the problem and stops, without a stack trace — this is a message
  * for whoever is releasing, not a crash. */
 function fail(message: string): never {
-  console.error(`\nchangelog.md is not ready to release.\n\n${message}\n`);
-  // The `never` return type lets the checks above narrow their values.
-  // Throwing would do that too, but prints a stack trace this message does not want.
+  // `fs.writeSync`, not `console.error`: writes to a piped stderr are
+  // asynchronous on macOS, and the `process.exit` below would discard whatever
+  // has not drained. Unlike the CLI, this cannot set `process.exitCode` and
+  // return, because the `never` return type is what lets the callers above
+  // narrow their values.
+  fs.writeSync(2, `\nchangelog.md is not ready to release.\n\n${message}\n`);
+  // Throwing would give `never` too, but prints a stack trace this message
+  // does not want.
   // eslint-disable-next-line n/no-process-exit
   process.exit(1);
 }
