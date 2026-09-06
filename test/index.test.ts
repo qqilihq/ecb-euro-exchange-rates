@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert';
 import { afterEach, describe, it } from 'node:test';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 
 // retrieving the history takes a bit of time
 describe('ECB exchange rates', { timeout: 60_000 }, () => {
@@ -66,6 +68,19 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       assert.throws(() => ((list as unknown as string[])[0] = 'HIJACKED'), TypeError);
       assert.deepEqual([...list], before);
     }
+  });
+
+  it('prints the daily rates as JSON from the command line', async () => {
+    // the `bin` entry, exercised as a process rather than an import, because
+    // that is the only way the shebang and the stdout contract are covered
+    const { stdout } = await promisify(execFile)(process.execPath, [
+      '--require',
+      'tsx/cjs',
+      path.join(__dirname, '..', 'lib', 'cli.ts'),
+    ]);
+    const parsed = JSON.parse(stdout) as exchangeRates.IExchangeRateResult;
+    assert.match(parsed.time, /\d{4}-\d{2}-\d{2}/);
+    assert.equal(typeof parsed.rates.USD, 'number');
   });
 
   // `fetch` turns none of these into a result field, so the only contract a

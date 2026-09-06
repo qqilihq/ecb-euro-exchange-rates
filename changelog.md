@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- A command line entry point: `npx ecb-euro-exchange-rates` prints the current daily rates as JSON. The code existed but was reachable only by running the package's main file by path
+
 ### Fixed
 
 - Report the HTTP status when the ECB answers a request with an error. `fetch`, `fetchHistoric` and `fetchHistoric90d` previously passed the error page on to the parser and rejected with `TypeError: Cannot read properties of undefined (reading '0')`; they now reject with `Error: Request to … failed with status 503 Service Unavailable`

@@ -43,6 +43,15 @@ export default defineConfig(
     },
   },
   {
+    // `package.json`'s `bin` points at `dist/cli.js`, but the rule resolves it
+    // the way Node would and compares it against this source path, so it
+    // reports "this file needs no shebang" on the one file that needs one --
+    // same cause as the `n/no-missing-import` exception above. The shebang is
+    // checked on the built output instead, with `head -1 dist/cli.js`.
+    files: ['lib/cli.ts'],
+    rules: { 'n/hashbang': 'off' },
+  },
+  {
     // Type-aware rules are switched *off* here, not unavailable:
     // `eslint.config.mjs` is listed in `tsconfig.json`'s `include` and `allowJs`
     // is on, so the file is part of the project. Whether this override can be

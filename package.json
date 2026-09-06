@@ -5,6 +5,9 @@
   "version": "6.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "ecb-euro-exchange-rates": "dist/cli.js"
+  },
   "license": "MIT",
   "files": [
     "dist"

@@ -58,6 +58,23 @@ console.log('USD: ' + result.rates.USD);
 
 Historic rates are available via `fetchHistoric90d` (fetches previous 90 days) and `fetchHistoric` (fetches **all** rates back to 1999).
 
+### On the command line
+
+The current rates are also available as a command, which prints the same result as JSON:
+
+```shell
+$ npx ecb-euro-exchange-rates
+{
+  "time": "2026-09-04",
+  "rates": {
+    "USD": 1.1622,
+    …
+  }
+}
+```
+
+Errors go to stderr and the exit code is non-zero, so `npx ecb-euro-exchange-rates | jq '.rates.USD'` is safe to use in a pipeline.
+
 Historic responses do not always carry the same currencies as the daily one: they may include currencies the ECB has since stopped publishing (HRK and RUB, for example), and they omit currencies that were not yet published at the time — the oldest entry, from January 1999, holds 27 rates. Their rates are therefore typed as optional, and the full set of codes that can occur is exported as `currencies` and `discontinuedCurrencies`.
 
 ## Development
