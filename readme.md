@@ -73,7 +73,14 @@ $ npx ecb-euro-exchange-rates
 }
 ```
 
-Errors go to stderr and the exit code is non-zero, so `npx ecb-euro-exchange-rates | jq '.rates.USD'` is safe to use in a pipeline.
+Errors go to stderr and the exit code is non-zero, so stdout carries JSON or nothing.
+
+Note that a shell pipeline reports the status of its **last** command, so `npx ecb-euro-exchange-rates | jq '.rates.USD'` exits 0 even when the fetch failed — `jq` succeeds on empty input. Enable `pipefail` if the failure has to propagate:
+
+```shell
+$ set -o pipefail
+$ npx ecb-euro-exchange-rates | jq -r '.rates.USD'
+```
 
 Historic responses do not always carry the same currencies as the daily one: they may include currencies the ECB has since stopped publishing (HRK and RUB, for example), and they omit currencies that were not yet published at the time — the oldest entry, from January 1999, holds 27 rates. Their rates are therefore typed as optional, and the full set of codes that can occur is exported as `currencies` and `discontinuedCurrencies`.
 
