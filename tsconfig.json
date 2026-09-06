@@ -60,6 +60,7 @@
   "include": [
     "lib",
     "test",
+    "dev",
     "eslint.config.mjs",
     "knip.config.ts"
   ]

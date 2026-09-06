@@ -34,8 +34,9 @@
     "lint:types": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "clean": "node -e \"['./coverage', './dist'].forEach(entry => require('fs').rmSync(entry, { recursive: true, force: true }));\"",
-    "preversion": "pnpm run clean && pnpm run lint && pnpm test && pnpm run build",
+    "preversion": "pnpm run clean && pnpm run lint && pnpm test && pnpm run build && tsx ./dev/verify-changelog.ts",
     "release": "pnpm version --message \"chore: release %s\"",
+    "version": "tsx ./dev/verify-changelog.ts --match-version",
     "prepare": "husky"
   },
   "dependencies": {
