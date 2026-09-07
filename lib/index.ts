@@ -199,15 +199,11 @@ export function parse(string: string): IHistoricExchangeRateResult[] {
   }
 
   for (const current of entries) {
-    const time = current?.['@_time']?.[0];
-    assertString(time, 'time');
+    const time = requireString(current?.['@_time']?.[0], 'time');
     const rates = {} as any;
     for (const item of current['Cube']) {
-      const currency = item['@_currency']?.[0];
-      assertString(currency, 'curency');
-      const rateString = item['@_rate']?.[0];
-      assertString(rateString, 'rate');
-      const rate = parseFloat(rateString);
+      const currency = requireString(item['@_currency']?.[0], 'currency');
+      const rate = parseFloat(requireString(item['@_rate']?.[0], 'rate'));
       rates[currency] = rate;
     }
 
@@ -217,8 +213,9 @@ export function parse(string: string): IHistoricExchangeRateResult[] {
   return result;
 }
 
-function assertString(value: unknown, valueName: string): asserts value is string {
+function requireString(value: unknown, valueName: string): string {
   if (typeof value !== 'string') {
     throw new Error(`Expected ${valueName} to be a string`);
   }
+  return value;
 }
