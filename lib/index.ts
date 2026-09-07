@@ -184,8 +184,9 @@ async function get(url: string): Promise<string> {
  *
  * @param string the raw XML body.
  * @throws `Error` if the body is not one of the ECB feeds, or if an entry is
- * missing its date, currency or rate. Note it is thrown, not returned: there
- * is no error result to inspect.
+ * missing its date, currency or rate, or carries a rate that does not read as
+ * a finite number. Note it is thrown, not returned: there is no error result
+ * to inspect.
  */
 export function parse(string: string): IHistoricExchangeRateResult[] {
   const data = new XMLParser({ ignoreAttributes: false, isArray: () => true }).parse(string);
@@ -199,15 +200,11 @@ export function parse(string: string): IHistoricExchangeRateResult[] {
   }
 
   for (const current of entries) {
-    const time = current?.['@_time']?.[0];
-    assertString(time, 'time');
+    const time = requireString(current?.['@_time']?.[0], 'time');
     const rates = {} as any;
     for (const item of current['Cube']) {
-      const currency = item['@_currency']?.[0];
-      assertString(currency, 'curency');
-      const rateString = item['@_rate']?.[0];
-      assertString(rateString, 'rate');
-      const rate = parseFloat(rateString);
+      const currency = requireString(item['@_currency']?.[0], 'currency');
+      const rate = requireNumber(item['@_rate']?.[0], 'rate');
       rates[currency] = rate;
     }
 
@@ -217,8 +214,30 @@ export function parse(string: string): IHistoricExchangeRateResult[] {
   return result;
 }
 
-function assertString(value: unknown, valueName: string): asserts value is string {
+function requireString(value: unknown, valueName: string): string {
   if (typeof value !== 'string') {
     throw new Error(`Expected ${valueName} to be a string`);
   }
+  return value;
+}
+
+/**
+ * `parseFloat` reports what it cannot read as `NaN` instead of throwing, and
+ * `NaN` is not an exchange rate: unchecked it reaches the caller as an
+ * ordinary `number`, where `JSON.stringify` renders it `null` and arithmetic
+ * on it quietly poisons every total it touches.
+ *
+ * `Number.isFinite`, not `!Number.isNaN`, because `parseFloat('Infinity')` is
+ * `Infinity` -- also a number, also not a rate. And `parseFloat`, not
+ * `Number`, which looks stricter but reads `''` as `0`: an empty rate would
+ * pass this check as a plausible zero, which is worse than the `NaN` it
+ * replaces.
+ */
+function requireNumber(value: unknown, valueName: string): number {
+  const string = requireString(value, valueName);
+  const number = parseFloat(string);
+  if (!Number.isFinite(number)) {
+    throw new Error(`Expected ${valueName} to be a number, but got '${string}'`);
+  }
+  return number;
 }

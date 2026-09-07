@@ -11,11 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A command line entry point: `npx ecb-euro-exchange-rates` prints the current daily rates as JSON. The code existed but was reachable only by running the package's main file by path
 
+### Changed
+
+- `parse` now rejects an entry whose rate is present but does not read as a finite number, with `Error: Expected rate to be a number, but got 'N/A'`. `parseFloat` reports what it cannot read as `NaN` instead of throwing, so such a rate previously reached the caller as an ordinary `number` — `JSON.stringify` renders it `null`, and arithmetic on it propagates silently through every total it touches. `'Infinity'` is rejected for the same reason. Applies to `fetch`, `fetchHistoric` and `fetchHistoric90d` as well, which all parse through `parse`
+
 ### Fixed
 
 - Report the HTTP status when the ECB answers a request with an error. `fetch`, `fetchHistoric` and `fetchHistoric90d` previously passed the error page on to the parser and rejected with `TypeError: Cannot read properties of undefined (reading '0')`; they now reject with `Error: Request to … failed with status 503 Service Unavailable`
 - `parse` now rejects a body that is not the ECB feed with `Error: Result data does not have the expected structure`, the message it always intended. That check was unreachable — indexing the missing envelope threw a `TypeError` first
 - Freeze the exported `currencies` and `discontinuedCurrencies` arrays. `readonly` is erased at runtime, so a consumer could previously write to the very arrays the library reads, changing what every other caller in the process saw
+- Correct the `curency` typo in the error message raised for an entry with no currency attribute; it now reads `Expected currency to be a string`
 
 ## [6.0.0] – 2026-09-05
 
