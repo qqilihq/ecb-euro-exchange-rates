@@ -85,6 +85,68 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       });
     });
 
+    // A minimal well-formed feed, so each test below varies exactly the one
+    // attribute it is about. The daily fixture is not reused for these: it
+    // would have to be edited into an invalid state to make the point, and
+    // then it no longer pins the happy path.
+    const feed = (entries: string, time = "time='2026-09-07'") =>
+      [
+        `<?xml version="1.0" encoding="UTF-8"?>`,
+        `<gesmes:Envelope xmlns:gesmes="http://www.gesmes.org/xml/2002-08-01" xmlns="http://www.ecb.int/vocabulary/2002-08-01/eurofxref">`,
+        `<Cube><Cube ${time}>${entries}</Cube></Cube>`,
+        `</gesmes:Envelope>`,
+      ].join('\n');
+
+    // `parseFloat` reports what it cannot read as `NaN` rather than throwing,
+    // so before the check these reached the caller as `rates.XYZ = NaN` -- and
+    // `JSON.stringify` renders `NaN` as `null`, so anyone serializing the
+    // result got a plausible-looking `"XYZ": null` with no error anywhere.
+    // 'Infinity' is in the list because `parseFloat` does read it, into a
+    // number that is still not a rate.
+    for (const rate of ['N/A', '', 'Infinity', '-Infinity', 'NaN']) {
+      it(`throws when a rate does not read as a finite number: '${rate}'`, () => {
+        assert.throws(() => exchangeRates.parse(feed(`<Cube currency='XYZ' rate='${rate}'/>`)), {
+          name: 'Error',
+          message: `Expected rate to be a number, but got '${rate}'`,
+        });
+      });
+    }
+
+    // The guard must not have narrowed what the feed itself carries, so this
+    // pins the formats the ECB actually publishes -- plain decimals of varying
+    // precision, and the integer-valued ones.
+    it('accepts the rate formats the feed publishes', () => {
+      const parsed = exchangeRates.parse(
+        feed(
+          "<Cube currency='USD' rate='1.0915'/><Cube currency='HUF' rate='376.1'/><Cube currency='ISK' rate='149'/>",
+        ),
+      );
+      assert.deepEqual(parsed, [{ time: '2026-09-07', rates: { USD: 1.0915, HUF: 376.1, ISK: 149 } }]);
+    });
+
+    // The other three throws the `parse` doc comment promises. None of them
+    // were covered, so nothing stopped the messages from drifting.
+    it('throws when an entry is missing its time', () => {
+      assert.throws(() => exchangeRates.parse(feed("<Cube currency='USD' rate='1.0915'/>", '')), {
+        name: 'Error',
+        message: 'Expected time to be a string',
+      });
+    });
+
+    it('throws when an entry is missing its currency', () => {
+      assert.throws(() => exchangeRates.parse(feed("<Cube rate='1.0915'/>")), {
+        name: 'Error',
+        message: 'Expected currency to be a string',
+      });
+    });
+
+    it('throws when an entry is missing its rate', () => {
+      assert.throws(() => exchangeRates.parse(feed("<Cube currency='USD'/>")), {
+        name: 'Error',
+        message: 'Expected rate to be a string',
+      });
+    });
+
     it('rejects when the request never completes', async () => {
       globalThis.fetch = () => Promise.reject(new TypeError('fetch failed'));
       await assert.rejects(exchangeRates.fetch(), TypeError);
