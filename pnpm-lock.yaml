@@ -18,6 +18,9 @@ importers:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.9.1(jiti@2.7.0)(supports-color@7.2.0))
+      '@qqilihq/changelog-keeper':
+        specifier: 0.1.0-beta.2
+        version: 0.1.0-beta.2
       '@types/node':
         specifier: ^22
         version: 22.20.1
@@ -633,6 +636,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@qqilihq/changelog-keeper@0.1.0-beta.2':
+    resolution: {integrity: sha512-b4YMuRDT9p3dKzVji8fzyFKPC+gbh1aLxGl0C8xyT+2Jey0sieWENIpWuMWjxlJV2zG5rV+ejzYE3g59ayr8iw==}
+    engines: {node: '>=22.12'}
+    hasBin: true
+
   '@simple-libs/child-process-utils@2.0.0':
     resolution: {integrity: sha512-dvNoRKLijXnD0XoJAz94pbNuB5GQgDr55UhpSPhffDkTT0Cmcqh9jSCOtwfT2d4H6MI9E7c4SgtMuJXZ6F3c6A==}
     engines: {node: '>=22'}
@@ -1150,6 +1158,11 @@ packages:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
 
+  marked@18.2.1:
+    resolution: {integrity: sha512-ii4bxCTCqqwpT86XZWgJNs+ZnAIZksmLGYMViWA7PDIXYIeNo1x6cDdX3JOip9NM/cI6p8z57FxliACboTruMA==}
+    engines: {node: '>= 20'}
+    hasBin: true
+
   minimatch@10.2.6:
     resolution: {integrity: sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==}
     engines: {node: 18 || 20 || >=22}
@@ -1379,6 +1392,11 @@ packages:
 
   semver@7.8.5:
     resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.8.6:
+    resolution: {integrity: sha512-9lpSSU4Mly3mrtruwLs1eLK6+gzbzqeBFwRNjIjE+9LuDpWdYctrQlQ3ej1Ilgi7gknpsTRnPoLP8DpCHqHIJw==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -1949,6 +1967,11 @@ snapshots:
   '@oxc-resolver/binding-win32-x64-msvc@11.24.2':
     optional: true
 
+  '@qqilihq/changelog-keeper@0.1.0-beta.2':
+    dependencies:
+      marked: 18.2.1
+      semver: 7.8.6
+
   '@simple-libs/child-process-utils@2.0.0':
     dependencies:
       '@simple-libs/stream-utils': 2.0.0
@@ -2508,6 +2531,8 @@ snapshots:
     dependencies:
       semver: 7.8.5
 
+  marked@18.2.1: {}
+
   minimatch@10.2.6:
     dependencies:
       brace-expansion: 5.0.9
@@ -2626,6 +2651,8 @@ snapshots:
   resolve-pkg-maps@1.0.0: {}
 
   semver@7.8.5: {}
+
+  semver@7.8.6: {}
 
   shebang-command@2.0.0:
     dependencies:

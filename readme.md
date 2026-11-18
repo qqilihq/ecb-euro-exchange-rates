@@ -107,7 +107,7 @@ Linting of code and commit message happens on commit via [Husky](https://github.
 
 ## Releasing to NPM
 
-First promote the changelog by hand: rename `## [Unreleased]` to `## [X.Y.Z] – <date>`, repoint the `[unreleased]` link reference at the new tag, and add a comparison link for the release. Commit that on its own — the wording, grouping and date deserve review, and nothing rewrites them for you.
+First promote the changelog by hand: move the entries under `## [Unreleased]` to a new `## [X.Y.Z] - YYYY-MM-DD` section below an empty `## [Unreleased]`, repoint the `[unreleased]` link reference at the new tag, and add a comparison link for the release. Commit that on its own — the wording, grouping and date deserve review, and nothing rewrites them for you.
 
 Then commit any remaining changes and run the following:
 
@@ -122,9 +122,9 @@ $ pnpm publish
 
 `--follow-tags` matters: a plain `git push` leaves the version tag behind, and the changelog’s comparison links stay broken until it lands. `pnpm publish` refuses to publish a branch that is not clean and up to date, so it will catch an unpushed commit — but not an unpushed tag.
 
-The release refuses to run unless the changelog is ready. `dev/verify-changelog.ts` checks it and never modifies it, from two lifecycle scripts: `preversion`, before the version is bumped, so the usual “forgot to promote it” case fails while the working tree is still clean; and `version`, after the bump, which is the only point at which the new version number is known and can be compared against the heading. The error message spells out what to write, with the repository URL and previous tag filled in.
+The release refuses to run unless the changelog is ready. [changelog-keeper](https://github.com/qqilihq/changelog-keeper) checks it and never modifies it: `pnpm run lint` (and so `preversion`) checks its structure and link references, and the `version` script, which runs after the bump — the only point at which the new version number is known — verifies that the newest release is that version, has entries, and that nothing is left under `[Unreleased]`. To promote, move the entries to a new `## [X.Y.Z] - YYYY-MM-DD` section below an empty `## [Unreleased]`, add its comparison link, and repoint `[unreleased]` at the new tag; the error messages spell out the exact lines. Release headings use a plain hyphen.
 
-A failure at the `version` stage — a changelog promoted to a different version than the one being released — aborts before any commit or tag, but leaves `package.json` bumped, since the bump happens first. Undo it with `git checkout package.json` before retrying.
+A failure at the `version` stage aborts before any commit or tag, and the script restores `package.json`, so the bump is undone too.
 
 Use `pnpm`, not `npm`, for these. Because the project pins its Node.js version through `devEngines.runtime`, npm refuses to run anything here (`EBADDEVENGINES`) unless the ambient Node.js version happens to match that exact version.
 
