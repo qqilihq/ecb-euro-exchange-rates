@@ -147,6 +147,14 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       });
     });
 
+    // Used to escape as `TypeError: current.Cube is not iterable`.
+    it('throws when an entry carries no rates', () => {
+      assert.throws(() => exchangeRates.parse(feed('')), {
+        name: 'Error',
+        message: 'Result data does not have the expected structure',
+      });
+    });
+
     it('rejects when the request never completes', async () => {
       globalThis.fetch = () => Promise.reject(new TypeError('fetch failed'));
       await assert.rejects(exchangeRates.fetch(), TypeError);

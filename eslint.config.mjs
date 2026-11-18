@@ -26,13 +26,6 @@ export default defineConfig(
       // report APIs marked @deprecated in their JSDoc
       '@typescript-eslint/no-deprecated': 'error',
 
-      // The XML parser returns `any`, and `parse` builds the rate map untyped.
-      // These stay off until `IExchangeRates` is reconciled with what the ECB
-      // actually returns and the parser output is narrowed properly.
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-member-access': 'off',
-
       // not part of eslint-plugin-n's recommended set, but cheap to keep honest
       'n/prefer-node-protocol': 'error',
 
