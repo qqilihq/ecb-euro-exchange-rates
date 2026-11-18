@@ -23,15 +23,8 @@ export default defineConfig(
       },
     },
     rules: {
-      // warn when using APIs marked @deprecated in their JSDoc
-      '@typescript-eslint/no-deprecated': 'warn',
-
-      // The XML parser returns `any`, and `parse` builds the rate map untyped.
-      // These stay off until `IExchangeRates` is reconciled with what the ECB
-      // actually returns and the parser output is narrowed properly.
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-member-access': 'off',
+      // report APIs marked @deprecated in their JSDoc
+      '@typescript-eslint/no-deprecated': 'error',
 
       // not part of eslint-plugin-n's recommended set, but cheap to keep honest
       'n/prefer-node-protocol': 'error',
@@ -50,12 +43,7 @@ export default defineConfig(
     },
   },
   {
-    // Type-aware rules are switched *off* here, not unavailable:
-    // `eslint.config.mjs` is listed in `tsconfig.json`'s `include` and `allowJs`
-    // is on, so the file is part of the project. Whether this override can be
-    // narrowed to only the rules that genuinely cannot apply is #60.
     files: ['**/*.mjs'],
-    extends: [tseslint.configs.disableTypeChecked],
     rules: {
       // `engines.node` is the floor for consumers of the published package.
       // Config files are neither published nor run by them -- they run on the

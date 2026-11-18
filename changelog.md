@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Check the changelog with [changelog-keeper](https://github.com/qqilihq/changelog-keeper) instead of `dev/verify-changelog.ts`, as part of `pnpm run lint` and again after the version bump. Release headings now use a plain hyphen instead of an en dash (development only)
 - Report the HTTP status when the ECB answers a request with an error. `fetch`, `fetchHistoric` and `fetchHistoric90d` previously passed the error page on to the parser and rejected with `TypeError: Cannot read properties of undefined (reading '0')`; they now reject with `Error: Request to … failed with status 503 Service Unavailable`
 - `parse` now rejects a body that is not the ECB feed with `Error: Result data does not have the expected structure`, the message it always intended. That check was unreachable — indexing the missing envelope threw a `TypeError` first
+- `parse` now rejects an entry that carries no rates with the same `Error: Result data does not have the expected structure`, instead of `TypeError: current.Cube is not iterable`
 - Freeze the exported `currencies` and `discontinuedCurrencies` arrays. `readonly` is erased at runtime, so a consumer could previously write to the very arrays the library reads, changing what every other caller in the process saw
 - Correct the `curency` typo in the error message raised for an entry with no currency attribute; it now reads `Expected currency to be a string`
 

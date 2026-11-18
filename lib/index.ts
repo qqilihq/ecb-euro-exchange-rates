@@ -189,22 +189,27 @@ async function get(url: string): Promise<string> {
  * to inspect.
  */
 export function parse(string: string): IHistoricExchangeRateResult[] {
-  const data = new XMLParser({ ignoreAttributes: false, isArray: () => true }).parse(string);
+  // `unknown`, not the `any` the parser declares: nothing about the input has
+  // been checked yet, so every step below has to prove the shape it relies on.
+  const data: unknown = new XMLParser({ ignoreAttributes: false, isArray: () => true }).parse(string);
   const result: IHistoricExchangeRateResult[] = [];
-  // Optional chaining, or the guard below is unreachable: for any payload that
-  // is not the ECB feed, `data['gesmes:Envelope']` is `undefined` and indexing
-  // it throws a TypeError before the check runs.
-  const entries = data['gesmes:Envelope']?.[0]?.['Cube']?.[0]?.['Cube'];
-  if (typeof entries !== 'object') {
+  const entries = children(children(children(data, 'gesmes:Envelope')?.[0], 'Cube')?.[0], 'Cube');
+  if (!entries) {
     throw new Error('Result data does not have the expected structure');
   }
 
   for (const current of entries) {
-    const time = requireString(current?.['@_time']?.[0], 'time');
-    const rates = {} as any;
-    for (const item of current['Cube']) {
-      const currency = requireString(item['@_currency']?.[0], 'currency');
-      const rate = requireNumber(item['@_rate']?.[0], 'rate');
+    const time = requireString(children(current, '@_time')?.[0], 'time');
+    const items = children(current, 'Cube');
+    if (!items) {
+      throw new Error('Result data does not have the expected structure');
+    }
+    // Keyed by `string`, not `HistoricCurrency`: the currency is deliberately
+    // not checked against the known lists, see `currencies`.
+    const rates: Record<string, number> = {};
+    for (const item of items) {
+      const currency = requireString(children(item, '@_currency')?.[0], 'currency');
+      const rate = requireNumber(children(item, '@_rate')?.[0], 'rate');
       rates[currency] = rate;
     }
 
@@ -212,6 +217,19 @@ export function parse(string: string): IHistoricExchangeRateResult[] {
   }
 
   return result;
+}
+
+/**
+ * The values under `key` in a node of the parser's output, or `undefined` if
+ * `node` is not an object or has no such key. `isArray: () => true` makes every
+ * element and attribute an array, so anything else is not the ECB feed either.
+ */
+function children(node: unknown, key: string): unknown[] | undefined {
+  if (typeof node !== 'object' || node === null || !Object.hasOwn(node, key)) {
+    return undefined;
+  }
+  const value: unknown = (node as Record<string, unknown>)[key];
+  return Array.isArray(value) ? value : undefined;
 }
 
 function requireString(value: unknown, valueName: string): string {
