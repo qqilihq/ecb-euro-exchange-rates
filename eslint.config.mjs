@@ -23,8 +23,8 @@ export default defineConfig(
       },
     },
     rules: {
-      // warn when using APIs marked @deprecated in their JSDoc
-      '@typescript-eslint/no-deprecated': 'warn',
+      // report APIs marked @deprecated in their JSDoc
+      '@typescript-eslint/no-deprecated': 'error',
 
       // The XML parser returns `any`, and `parse` builds the rate map untyped.
       // These stay off until `IExchangeRates` is reconciled with what the ECB
