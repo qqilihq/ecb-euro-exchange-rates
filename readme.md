@@ -107,7 +107,7 @@ Linting of code and commit message happens on commit via [Husky](https://github.
 
 ## Releasing to NPM
 
-First promote the changelog by hand: rename `## [Unreleased]` to `## [X.Y.Z] – <date>`, repoint the `[unreleased]` link reference at the new tag, and add a comparison link for the release. Commit that on its own — the wording, grouping and date deserve review, and nothing rewrites them for you.
+First promote the changelog by hand: move the entries under `## [Unreleased]` to a new `## [X.Y.Z] - YYYY-MM-DD` section below an empty `## [Unreleased]`, repoint the `[unreleased]` link reference at the new tag, and add a comparison link for the release. Commit that on its own — the wording, grouping and date deserve review, and nothing rewrites them for you.
 
 Then commit any remaining changes and run the following:
 
