@@ -184,10 +184,11 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       const result = await exchangeRates.fetchHistoric90d();
       assert.equal(Array.isArray(result), true);
       assert.equal(result.length > 50, true);
-      assert.equal(typeof result[0], 'object');
-      assert.equal(typeof result[0]!.time, 'string');
-      assert.equal(typeof result[0]!.rates, 'object');
-      assert.equal(typeof result[0]!.rates.USD, 'number');
+      const [first] = result;
+      assert.ok(first);
+      assert.equal(typeof first.time, 'string');
+      assert.equal(typeof first.rates, 'object');
+      assert.equal(typeof first.rates.USD, 'number');
 
       // A 90-day window cannot be checked like the full history, because it contains
       // none of the discontinued currencies. What must hold is that it introduces no
@@ -215,11 +216,14 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
       const result = await exchangeRates.fetchHistoric();
       assert.equal(Array.isArray(result), true);
       assert.equal(result.length > 5000, true);
-      assert.equal(typeof result[0], 'object');
-      assert.equal(typeof result[0]!.time, 'string');
-      assert.equal(typeof result[0]!.rates, 'object');
-      assert.equal(typeof result[0]!.rates.USD, 'number');
-      assert.equal(result[result.length - 1]!.time, '1999-01-04');
+      const [first] = result;
+      assert.ok(first);
+      assert.equal(typeof first.time, 'string');
+      assert.equal(typeof first.rates, 'object');
+      assert.equal(typeof first.rates.USD, 'number');
+      const oldest = result.at(-1);
+      assert.ok(oldest);
+      assert.equal(oldest.time, '1999-01-04');
 
       // the union across the whole history must match the two exported lists, so a
       // currency appearing or disappearing upstream shows up here instead of
@@ -235,7 +239,6 @@ describe('ECB exchange rates', { timeout: 60_000 }, () => {
 
       // why the historic rates are optional: the oldest entry predates several of
       // the currencies published today
-      const oldest = result[result.length - 1]!;
       assert.equal(Object.keys(oldest.rates).length < exchangeRates.currencies.length, true);
     });
   });

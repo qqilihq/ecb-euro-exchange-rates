@@ -12,7 +12,7 @@ export default defineConfig(
     ignores: ['dist/**', 'coverage/**'],
   },
   eslint.configs.recommended,
-  tseslint.configs.recommendedTypeChecked,
+  tseslint.configs.strictTypeChecked,
   eslintPluginN.configs['flat/recommended'],
   eslintConfigPrettier,
   {
@@ -23,8 +23,23 @@ export default defineConfig(
       },
     },
     rules: {
-      // report APIs marked @deprecated in their JSDoc
-      '@typescript-eslint/no-deprecated': 'error',
+      // The strict preset allows only strings in a template. A number renders
+      // as expected, and wrapping each one in `String()` adds nothing, so that
+      // one is allowed. Every option is spelled out because options replace the
+      // preset's rather than merge with them: naming `allowNumber` alone falls
+      // back to the rule's lenient defaults, which also let `null`,
+      // `undefined`, booleans, `any` and regular expressions through.
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        {
+          allowAny: false,
+          allowBoolean: false,
+          allowNever: false,
+          allowNullish: false,
+          allowNumber: true,
+          allowRegExp: false,
+        },
+      ],
 
       // not part of eslint-plugin-n's recommended set, but cheap to keep honest
       'n/prefer-node-protocol': 'error',
