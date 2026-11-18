@@ -17,12 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Check the changelog with [changelog-keeper](https://github.com/qqilihq/changelog-keeper) instead of `dev/verify-changelog.ts`, as part of `pnpm run lint` and again after the version bump. Release headings now use a plain hyphen instead of an en dash (development only)
 - Report the HTTP status when the ECB answers a request with an error. `fetch`, `fetchHistoric` and `fetchHistoric90d` previously passed the error page on to the parser and rejected with `TypeError: Cannot read properties of undefined (reading '0')`; they now reject with `Error: Request to … failed with status 503 Service Unavailable`
 - `parse` now rejects a body that is not the ECB feed with `Error: Result data does not have the expected structure`, the message it always intended. That check was unreachable — indexing the missing envelope threw a `TypeError` first
 - Freeze the exported `currencies` and `discontinuedCurrencies` arrays. `readonly` is erased at runtime, so a consumer could previously write to the very arrays the library reads, changing what every other caller in the process saw
 - Correct the `curency` typo in the error message raised for an entry with no currency attribute; it now reads `Expected currency to be a string`
 
-## [6.0.0] – 2026-09-05
+## [6.0.0] - 2026-09-05
 
 ### Added
 
@@ -39,13 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `IExchangeRates` is now a type alias derived from `currencies` rather than an interface, so it can no longer be extended through declaration merging
 - Require NodeJS 22
 
-## [5.0.0] – 2026-01-24
+## [5.0.0] - 2026-01-24
 
 ### Removed
 
 - Remove BGN from response typing (API does not longer provide this, as [Bulgaria joined euro area on 1 January 2026](https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.pr250708~b9676a9fa8.en.html))
 
-## [4.0.1] – 2025-10-09
+## [4.0.1] - 2025-10-09
 
 ### Fixed
 
@@ -67,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update dependencies
 
-## [3.0.0] – 2023-04-08
+## [3.0.0] - 2023-04-08
 
 ### Changed
 
@@ -75,19 +76,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace `xml2js` with `fast-xml-parser`
 - Update dependencies and devDependencies
 
-## [2.0.2] – 2022-07-14
+## [2.0.2] - 2022-07-14
 
 ### Fixed
 
 - Update dependencies
 
-## [2.0.1] – 2021-09-18
+## [2.0.1] - 2021-09-18
 
 ### Fixed
 
 - Update dependencies
 
-## [2.0.0] – 2020-03-31
+## [2.0.0] - 2020-03-31
 
 ### Changed
 
