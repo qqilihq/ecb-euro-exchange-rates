@@ -50,12 +50,7 @@ export default defineConfig(
     },
   },
   {
-    // Type-aware rules are switched *off* here, not unavailable:
-    // `eslint.config.mjs` is listed in `tsconfig.json`'s `include` and `allowJs`
-    // is on, so the file is part of the project. Whether this override can be
-    // narrowed to only the rules that genuinely cannot apply is #60.
     files: ['**/*.mjs'],
-    extends: [tseslint.configs.disableTypeChecked],
     rules: {
       // `engines.node` is the floor for consumers of the published package.
       // Config files are neither published nor run by them -- they run on the
